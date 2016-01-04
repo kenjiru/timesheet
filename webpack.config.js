@@ -16,37 +16,44 @@ var config = {
 			[
 				'webpack-dev-server/client?http://0.0.0.0:8080',
 				'webpack/hot/dev-server',
-				src_dir + '/App.js'
+				src_dir + '/App.tsx'
 			],
-			src_dir + '/App.js'
+			src_dir + '/App.tsx'
 		)
 	},
 	output: {
 		path: path.join(__dirname, '/dist'),
 		filename: 'App.js?[hash]'
 	},
+	resolve: {
+		extensions: ['', '.ts', '.tsx', '.js']
+	},
 	module: {
 		loaders: [
 			{
 				test: /\.js$/,
 				loaders: envDep(
-					['react-hot', 'babel'],
-					['babel']
+					['react-hot', 'babel-loader'],
+					['babel-loader']
 				),
 				include: src_dir
-			},
-			{
+			}, {
+				test: /\.(tsx|ts)$/,
+				loaders: envDep(
+					['react-hot', 'babel-loader', 'ts-loader'],
+					['babel-loader', 'ts-loader']
+				),
+				include: src_dir
+			}, {
 				test: /\.less$/,
 				loader: envDep(
-					"style-loader!css-loader!autoprefixer-loader!less-loader",
-					ExtractTextPlugin.extract("style-loader", "css-loader!autoprefixer-loader!less-loader")
+					"style-loader!css-loader!less-loader",
+					ExtractTextPlugin.extract("style-loader", "css-loader!less-loader")
 				)
-			},
-			{
+			}, {
 				test: /\.css/,
 				loader: "style-loader!css-loader"
-			},
-			{
+			}, {
 				test: /\.(png|jpg|gif|eot|ttf|woff|woff2|svg)$/,
 				exclude: /public/,
 				loader: 'url-loader?limit=5000&name=[path][name].[ext]?[hash]'
@@ -57,6 +64,7 @@ var config = {
 		new HtmlWebpackPlugin({
 		    title: "React TypeScript demo"
 		}),
+		new ExtractTextPlugin("[name].css?[hash]"),
 		new ProvidePlugin({
 			$: "jquery",
 			jQuery: "jquery",

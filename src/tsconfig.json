@@ -1,0 +1,25 @@
+{
+	"compileOnSave": false,
+	"filesGlob": [
+		"../typings/**/*.*.ts",
+		"**/*.{ts,tsx}"
+	],
+	"compilerOptions": {
+		"jsx": "preserve",
+		"target": "es6",
+		"noImplicitAny": false,
+		"removeComments": false,
+		"preserveConstEnums": true,
+		"sourceMap": true,
+		"module": "system",
+		"allowSyntheticDefaultImports": true
+	},
+	"files": [
+		"../typings/tsd.d.ts",
+		"App.tsx"
+	],
+	"exclude": [],
+	"atom": {
+		"rewriteTsconfig": true
+	}
+}
