@@ -2,6 +2,7 @@
   "name": "timesheet",
   "ambientDependencies": {
     "react": "github:DefinitelyTyped/DefinitelyTyped/react/react.d.ts#fa04c80f4a889613b96cb4f283848c61a9f64233",
+    "react-bootstrap": "github:DefinitelyTyped/DefinitelyTyped/react-bootstrap/react-bootstrap.d.ts#5f3b413653e738d5d9bfd1575d075e5334b5e564",
     "react-dom": "github:DefinitelyTyped/DefinitelyTyped/react/react-dom.d.ts#fa04c80f4a889613b96cb4f283848c61a9f64233"
   }
 }

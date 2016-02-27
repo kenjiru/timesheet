@@ -5,7 +5,8 @@
     "bootstrap": "^3.3.6",
     "bootstrap-datepicker": "^1.6.0",
     "jquery": "^2.1.4",
-    "lodash": "~3.10.0"
+    "lodash": "~3.10.0",
+    "react-bootstrap": "^0.28.3"
   },
   "devDependencies": {
     "autoprefixer": "^6.0.0",
