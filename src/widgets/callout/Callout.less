@@ -1,0 +1,44 @@
+@import "~bootstrap/less/variables.less";
+
+.bs-callout {
+	padding: 20px;
+	margin: 20px 0;
+	border: 1px solid #eee;
+	border-left-width: @padding-xs-horizontal;
+	border-radius: @border-radius-small;
+}
+
+.bs-callout h4 {
+	margin-top: 0;
+	margin-bottom: @padding-small-vertical;
+}
+
+.bs-callout p:last-child {
+	margin-bottom: 0;
+}
+
+.bs-callout code {
+	border-radius: @border-radius-small;
+}
+
+.bs-callout+.bs-callout {
+	margin-top: -5px;
+}
+
+.bs-mixin(@name, @callout-color) {
+	// Callout border color
+	.@{name} {
+		border-left-color: @callout-color;
+	}
+	// Callout header color
+	.@{name} h4 {
+		color: @callout-color;
+	}
+}
+
+.bs-mixin(bs-callout-default, @gray);
+.bs-mixin(bs-callout-primary, @brand-primary);
+.bs-mixin(bs-callout-info, @brand-info);
+.bs-mixin(bs-callout-danger, @brand-danger);
+.bs-mixin(bs-callout-warning, @brand-warning);
+.bs-mixin(bs-callout-success, @brand-success);
