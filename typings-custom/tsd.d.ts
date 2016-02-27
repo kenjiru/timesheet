@@ -1,0 +1,1 @@
+/// <reference path="./bootstrap-datepicker.d.ts" />
