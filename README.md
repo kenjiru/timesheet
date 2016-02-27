@@ -4,7 +4,7 @@ Install the node modules:
 
 Install the TypeScript definition files:
 
-`tsd install`
+`typings install`
 
 Start the webpack-dev-server:
 

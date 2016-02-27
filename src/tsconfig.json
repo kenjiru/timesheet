@@ -15,7 +15,7 @@
 		"allowSyntheticDefaultImports": true
 	},
 	"files": [
-		"../typings/tsd.d.ts",
+		"../typings/main.d.ts",
 		"App.tsx"
 	],
 	"exclude": [],
