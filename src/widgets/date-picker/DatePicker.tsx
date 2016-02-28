@@ -7,14 +7,21 @@ import "bootstrap-datepicker/dist/css/bootstrap-datepicker.css";
 class DatePicker extends React.Component<IDatePickerProps, IDatePickerState> {
     static defaultProps:IDatePickerProps = {
         options: {
-            autoclose: true
+            autoclose: true,
+            format: "dd/mm/yyyy"
         }
     };
 
     componentDidMount() {
         let domElement = ReactDOM.findDOMNode(this);
 
-        $(domElement).find("input").datepicker(this.props.options);
+        let $datePicker = $(domElement).find("input").datepicker(this.props.options);
+
+        $datePicker.on("changeDate", (ev) => {
+            if (typeof this.props.onChange == "function") {
+                this.props.onChange(ev.date);
+            }
+        });
     }
 
     render() {
@@ -25,7 +32,8 @@ class DatePicker extends React.Component<IDatePickerProps, IDatePickerState> {
 }
 
 interface IDatePickerProps extends React.Props<DatePicker> {
-    options?: any
+    options?: any,
+    onChange?: (date:Date) => void
 }
 interface IDatePickerState {}
 
