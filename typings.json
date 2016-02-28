@@ -1,8 +1,14 @@
 {
   "name": "timesheet",
   "ambientDependencies": {
+    "lodash": "github:DefinitelyTyped/DefinitelyTyped/lodash/lodash.d.ts#f696b8c0c2d6e2a31c794a3752f68de85dce4c2b",
     "react": "github:DefinitelyTyped/DefinitelyTyped/react/react.d.ts#fa04c80f4a889613b96cb4f283848c61a9f64233",
     "react-bootstrap": "github:DefinitelyTyped/DefinitelyTyped/react-bootstrap/react-bootstrap.d.ts#5f3b413653e738d5d9bfd1575d075e5334b5e564",
     "react-dom": "github:DefinitelyTyped/DefinitelyTyped/react/react-dom.d.ts#fa04c80f4a889613b96cb4f283848c61a9f64233"
+  },
+  "dependencies": {
+    "react-redux": "github:andrew-w-ross/typings-react-redux#6be88a57427f8ec220cad13d68565fd5f5711146",
+    "redux": "github:andrew-w-ross/typings-redux#2e0b57e18c6240d17fde045573d74e649762437b",
+    "redux-thunk": "github:andrew-w-ross/typings-redux-thunk#11edd7b7e5add9721b60bcf6994e814b0eeaa3f6"
   }
 }

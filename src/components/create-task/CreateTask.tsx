@@ -5,8 +5,8 @@ import { Grid, Row, Col, Panel, Button, Input, Glyphicon } from "react-bootstrap
 import DatePicker from "../../widgets/date-picker/DatePicker";
 import Callout from "../../widgets/callout/Callout";
 
-class AddTask extends React.Component<IAddTaskProps, IAddTaskState> {
-    constructor(props:IAddTaskProps) {
+class CreateTask extends React.Component<ICreateTaskProps, ICreateTaskState> {
+    constructor(props:ICreateTaskProps) {
         super(props);
 
         this.state = {
@@ -17,7 +17,7 @@ class AddTask extends React.Component<IAddTaskProps, IAddTaskState> {
 
     render() {
         return (
-            <Grid className="add-task" fluid={true}>
+            <Grid className="create-task" fluid={true}>
                 <Row>
                     <Col md={2}>
                         <DatePicker>
@@ -102,11 +102,11 @@ class AddTask extends React.Component<IAddTaskProps, IAddTaskState> {
     }
 }
 
-interface IAddTaskProps {}
+interface ICreateTaskProps {}
 
-interface IAddTaskState {
+interface ICreateTaskState {
     workingInterval?: string,
     taskDescription?: string
 }
 
-export default AddTask;
+export default CreateTask;

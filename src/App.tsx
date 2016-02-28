@@ -2,7 +2,11 @@ import 'babel-polyfill';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { Grid, Row, Col } from "react-bootstrap";
-import AddTask from "./components/add-task/AddTask";
+
+import { Provider } from "react-redux";
+
+import store from "./model/store";
+import CreateTask from "./components/create-task/CreateTask";
 
 import "bootstrap";
 import "bootstrap/dist/css/bootstrap.css";
@@ -16,10 +20,12 @@ class App extends React.Component<IAppProps, IAppState> {
 
     render() {
         return (
-            <div className="app">
-                {this.renderHeader()}
-                <AddTask/>
-            </div>
+            <Provider store={store}>
+                <div className="app">
+                    {this.renderHeader()}
+                    <CreateTask/>
+                </div>
+            </Provider>
         )
     }
 
