@@ -5,7 +5,7 @@ import { Grid, Row, Col, Panel, Button, Input, Glyphicon } from "react-bootstrap
 import DatePicker from "../../widgets/date-picker/DatePicker";
 import Callout from "../../widgets/callout/Callout";
 
-import { ITask } from "../../model/store";
+import { ITask, IProject } from "../../model/store";
 import { addNewTask, IAction } from "../../model/actions";
 
 class CreateTask extends React.Component<ICreateTaskProps, ICreateTaskState> {
@@ -37,8 +37,7 @@ class CreateTask extends React.Component<ICreateTaskProps, ICreateTaskState> {
                                onChange={this.handleProjectChanged.bind(this)}
                                addonBefore={<Glyphicon glyph="folder-open"/>}>
                             <option value="none">none</option>
-                            <option value="control-panel">Control Panel</option>
-                            <option value="private">Private</option>
+                            {this.renderProjects()}
                         </Input>
                     </Col>
 
@@ -74,6 +73,12 @@ class CreateTask extends React.Component<ICreateTaskProps, ICreateTaskState> {
                 </Row>
             </Grid>
         )
+    }
+
+    renderProjects() {
+        return _.map(this.props.projects, (project:IProject) => (
+            <option key={project.id} value={project.id}>{project.name}</option>
+        ));
     }
 
     handleStartDateChanged(date:Date) {
@@ -164,8 +169,8 @@ interface IDateInterval {
 }
 
 interface ICreateTaskProps {
+    projects: IProject[],
     dispatch: (action) => void
-    //onTaskCreated?: (task:ITask) => void
 }
 
 interface ICreateTaskState {

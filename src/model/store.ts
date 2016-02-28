@@ -12,10 +12,10 @@ export interface IStore {
 export interface IProject {
     id: string,
     name: string,
-    client: string,
-    description: string,
-    location: string,
-    rate: string
+    client?: string,
+    description?: string,
+    location?: string,
+    rate?: string
 }
 
 export interface ITask {

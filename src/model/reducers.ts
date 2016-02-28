@@ -4,7 +4,14 @@ import { IStore } from "./store";
 import { IAction, ADD_TASK } from "./actions";
 
 let defaultStore = {
-    tasks: []
+    tasks: [],
+    projects: [{
+        id: "control-panel",
+        name: "Control Panel"
+    }, {
+        id: "private",
+        name: "Private"
+    }]
 };
 
 export function mainReducer(store: IStore = defaultStore, action: IAction): IStore {
