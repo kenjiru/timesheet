@@ -7,6 +7,7 @@ import Callout from "../../widgets/callout/Callout";
 
 import { ITask, IProject } from "../../model/store";
 import { addNewTask, IAction } from "../../model/actions";
+import IdUtil from "../../utils/IdUtil";
 
 class CreateTask extends React.Component<ICreateTaskProps, ICreateTaskState> {
     constructor(props:ICreateTaskProps) {
@@ -14,7 +15,7 @@ class CreateTask extends React.Component<ICreateTaskProps, ICreateTaskState> {
 
         this.state = {
             startDate: "18/02/2016",
-            projectId: "control-panel",
+            projectId: null,
             workingInterval: "08:30-12:30, 14:00-18:00",
             description: "Setting up the project",
             tagId: "office"
@@ -118,7 +119,7 @@ class CreateTask extends React.Component<ICreateTaskProps, ICreateTaskState> {
         let taskInterval = this.computeTaskInterval();
 
         let task:ITask = {
-            id: this.generateNewId(),
+            id: IdUtil.newId(),
             projectId: state.projectId,
             startDate: taskInterval.startDate,
             endDate: taskInterval.endDate,
@@ -151,10 +152,6 @@ class CreateTask extends React.Component<ICreateTaskProps, ICreateTaskState> {
                 endTime: periods[1]
             }
         });
-    }
-
-    generateNewId():string {
-        return "id-" + Math.random();
     }
 }
 

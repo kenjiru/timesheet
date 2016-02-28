@@ -1,4 +1,5 @@
 import _ from "lodash";
+import IdUtil from "../utils/IdUtil";
 
 import { IStore } from "./store";
 import { IAction, ADD_TASK } from "./actions";
@@ -6,10 +7,10 @@ import { IAction, ADD_TASK } from "./actions";
 let defaultStore = {
     tasks: [],
     projects: [{
-        id: "control-panel",
+        id: IdUtil.newId(),
         name: "Control Panel"
     }, {
-        id: "private",
+        id: IdUtil.newId(),
         name: "Private"
     }]
 };
