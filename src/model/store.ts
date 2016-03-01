@@ -42,8 +42,7 @@ export interface IBreak {
     taskId: string,
     startDate: string,
     endDate: string,
-    endTime: string,
-    description: string
+    description?: string
 }
 
 const store = applyMiddleware(thunk)(createStore)(mainReducer);

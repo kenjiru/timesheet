@@ -1,4 +1,4 @@
-import { ITask, ITaskTag } from "./store";
+import { ITask, ITaskTag, IBreak } from "./store";
 
 export const ADD_TASK = "ADD_TASK";
 function addTask(task:ITask): IAction {
@@ -16,12 +16,24 @@ function addTaskTag(taskTag:ITaskTag): IAction {
     }
 }
 
+export const ADD_BREAK = "ADD_BREAK";
+function addBreak(breakItem:IBreak): IAction {
+    return {
+        type: ADD_BREAK,
+        payload: breakItem
+    }
+}
+
 export function addNewTask(task:ITask) {
     return dispatch => dispatch(addTask(task));
 }
 
 export function addNewTaskTag(taskTag:ITaskTag) {
     return dispatch => dispatch(addTaskTag(taskTag));
+}
+
+export function addNewBreak(breakItem:IBreak) {
+    return dispatch => dispatch(addBreak(breakItem));
 }
 
 export interface IAction {

@@ -5,8 +5,8 @@ import { Grid, Row, Col, Panel, Button, Input, Glyphicon } from "react-bootstrap
 import DatePicker from "../../widgets/date-picker/DatePicker";
 import Callout from "../../widgets/callout/Callout";
 
-import { ITask, IProject, ITag, ITaskTag } from "../../model/store";
-import { IAction, addNewTask, addNewTaskTag } from "../../model/actions";
+import { ITask, IProject, ITag, ITaskTag, IBreak } from "../../model/store";
+import { IAction, addNewTask, addNewTaskTag, addNewBreak } from "../../model/actions";
 import IdUtil from "../../utils/IdUtil";
 
 class CreateTask extends React.Component<ICreateTaskProps, ICreateTaskState> {
@@ -138,8 +138,28 @@ class CreateTask extends React.Component<ICreateTaskProps, ICreateTaskState> {
             tagId: state.tagId
         };
 
+        let breaks:IBreak[] = this.computeBreaks(task.taskId);
+        _.each(breaks, (breakItem:IBreak) => this.props.dispatch(addNewBreak(breakItem)));
+
         this.props.dispatch(addNewTaskTag(taskTag));
         this.props.dispatch(addNewTask(task));
+    }
+
+    computeBreaks(taskId):IBreak[] {
+        let breaks:IBreak[] = [];
+
+        let workingPeriods = this.computeWorkingPeriods();
+
+        for (let i=0; i < workingPeriods.length - 1; i++) {
+            breaks.push({
+                breakId: IdUtil.newId(),
+                taskId,
+                startDate: this.state.startDate + " " + workingPeriods[i].endTime,
+                endDate: this.state.startDate + " " + workingPeriods[i+1].startTime
+            });
+        }
+
+        return breaks;
     }
 
     computeTaskInterval():IDateInterval {
@@ -160,8 +180,8 @@ class CreateTask extends React.Component<ICreateTaskProps, ICreateTaskState> {
             let periods = interval.split("-");
 
             return {
-                startTime: periods[0],
-                endTime: periods[1]
+                startTime: periods[0].trim(),
+                endTime: periods[1].trim()
             }
         });
     }
