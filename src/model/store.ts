@@ -6,7 +6,9 @@ import { mainReducer } from "./reducers";
 export interface IStore {
     projects?: IProject[],
     tasks?: ITask[],
-    breaks?: IBreak[]
+    breaks?: IBreak[],
+    tags?: ITag[],
+    taskTags?: ITaskTag[]
 }
 
 export interface IProject {
@@ -24,12 +26,18 @@ export interface ITask {
     description: string
 }
 
-interface ITag {
+export interface ITag {
     tagId: string,
     name: string
 }
 
-interface IBreak {
+export interface ITaskTag {
+    id: string,
+    taskId: string,
+    tagId: string
+}
+
+export interface IBreak {
     breakId: string,
     taskId: string,
     startDate: string,

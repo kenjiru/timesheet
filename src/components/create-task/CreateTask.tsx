@@ -5,8 +5,8 @@ import { Grid, Row, Col, Panel, Button, Input, Glyphicon } from "react-bootstrap
 import DatePicker from "../../widgets/date-picker/DatePicker";
 import Callout from "../../widgets/callout/Callout";
 
-import { ITask, IProject } from "../../model/store";
-import { addNewTask, IAction } from "../../model/actions";
+import { ITask, IProject, ITag, ITaskTag } from "../../model/store";
+import { IAction, addNewTask, addNewTaskTag } from "../../model/actions";
 import IdUtil from "../../utils/IdUtil";
 
 class CreateTask extends React.Component<ICreateTaskProps, ICreateTaskState> {
@@ -60,8 +60,7 @@ class CreateTask extends React.Component<ICreateTaskProps, ICreateTaskState> {
                                value={this.state.tagId} addonBefore={<Glyphicon glyph="tags"/>}
                                onChange={this.handleTagsChange.bind(this)}>
                             <option value="none">none</option>
-                            <option value="office">Office</option>
-                            <option value="home">Home</option>
+                            {this.renderTags()}
                         </Input>
                     </Col>
 
@@ -79,6 +78,12 @@ class CreateTask extends React.Component<ICreateTaskProps, ICreateTaskState> {
     renderProjects() {
         return _.map(this.props.projects, (project:IProject) => (
             <option key={project.projectId} value={project.projectId}>{project.name}</option>
+        ));
+    }
+
+    renderTags() {
+        return _.map(this.props.tags, (tag:ITag) => (
+            <option key={tag.tagId} value={tag.tagId}>{tag.name}</option>
         ));
     }
 
@@ -117,15 +122,23 @@ class CreateTask extends React.Component<ICreateTaskProps, ICreateTaskState> {
     handleAddClicked() {
         let state = this.state;
         let taskInterval = this.computeTaskInterval();
+        let taskId = IdUtil.newId();
 
         let task:ITask = {
-            taskId: IdUtil.newId(),
+            taskId,
             projectId: state.projectId,
             startDate: taskInterval.startDate,
             endDate: taskInterval.endDate,
             description: state.description
         };
 
+        let taskTag:ITaskTag = {
+            id: IdUtil.newId(),
+            taskId: taskId,
+            tagId: state.tagId
+        };
+
+        this.props.dispatch(addNewTaskTag(taskTag));
         this.props.dispatch(addNewTask(task));
     }
 
@@ -166,6 +179,7 @@ interface IDateInterval {
 
 interface ICreateTaskProps {
     projects: IProject[],
+    tags: ITag[],
     dispatch: (action) => void
 }
 

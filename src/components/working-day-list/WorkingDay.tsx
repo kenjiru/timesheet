@@ -3,7 +3,7 @@ import moment from "moment";
 import "moment-duration-format";
 import { Grid, Row, Col, Panel, Glyphicon } from "react-bootstrap";
 
-import { ITask, IProject } from "../../model/store";
+import { ITask, IProject, ITag, ITaskTag } from "../../model/store";
 import DateUtil from "../../utils/DateUtil";
 
 class WorkingDay extends React.Component<IWorkingDayProps, IWorkingDayState> {
@@ -27,8 +27,9 @@ class WorkingDay extends React.Component<IWorkingDayProps, IWorkingDayState> {
 
         return (
             <Row>
-                <Col md={6}>{date}</Col>
-                <Col md={6} className="text-right">
+                <Col md={9}>{date}</Col>
+                <Col md={1}>Tags</Col>
+                <Col md={2} className="text-right">
                     <div>totalDayWorkTime</div>
                     <div>totalDayBreakTime</div>
                 </Col>
@@ -37,7 +38,7 @@ class WorkingDay extends React.Component<IWorkingDayProps, IWorkingDayState> {
     }
 
     renderTasks() {
-        return _.map(this.props.workingDay.tasks, task => this.renderTask(task));
+        return _.map(this.props.workingDay.tasks, (task:ITask) => this.renderTask(task));
     }
 
     renderTask(task:ITask) {
@@ -45,12 +46,18 @@ class WorkingDay extends React.Component<IWorkingDayProps, IWorkingDayState> {
         let end:moment.Moment = DateUtil.getDate(task.endDate);
         let workDuration = moment.duration(end.diff(start)).format("HH:mm");
 
+        let tagsString = this.computeTaskTags(task.taskId);
+        let projectName = this.computeProjectName(task.projectId);
+
         return (
-            <Row>
+            <Row key={task.taskId}>
                 <Col md={2}>{DateUtil.extractTime(task.startDate)} - {DateUtil.extractTime(task.endDate)}</Col>
-                <Col md={8}>
-                    <div>{this.getProjectName(task.projectId)}</div>
+                <Col md={7}>
+                    <div>{projectName}</div>
                     <div>{task.description}</div>
+                </Col>
+                <Col md={1}>
+                    <div>{tagsString}</div>
                 </Col>
                 <Col md={2} className="text-right">
                     <div>{workDuration}</div>
@@ -58,6 +65,16 @@ class WorkingDay extends React.Component<IWorkingDayProps, IWorkingDayState> {
                 </Col>
             </Row>
         )
+    }
+
+    computeTaskTags(taskId:string):string {
+        let taskTags = _.filter(this.props.taskTags, {taskId: taskId});
+        let tagIds = _.map(taskTags, (taskTag:ITaskTag) => taskTag.tagId);
+        let tags = _.filter(this.props.tags, (tag:ITag) => {
+            return _.indexOf(tagIds, tag.tagId) != -1;
+        });
+
+        return _.map(tags, (tag:ITag) => tag.name).join(",");
     }
 
     computeDaySummary():IDaySummary {
@@ -70,8 +87,8 @@ class WorkingDay extends React.Component<IWorkingDayProps, IWorkingDayState> {
         return daySummary;
     }
 
-    getProjectName(projectId:string):string {
-        let project:IProject = _.find(this.props.projects, {id: projectId});
+    computeProjectName(projectId:string):string {
+        let project:IProject = _.find(this.props.projects, {projectId});
 
         if (project) {
             return project.name;
@@ -81,7 +98,9 @@ class WorkingDay extends React.Component<IWorkingDayProps, IWorkingDayState> {
 
 interface IWorkingDayProps extends React.Props<WorkingDay> {
     workingDay: IWorkingDay,
-    projects: IProject[]
+    projects: IProject[],
+    tags: ITag[],
+    taskTags: ITaskTag[]
 }
 
 interface IWorkingDayState {
