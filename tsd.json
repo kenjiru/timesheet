@@ -1,0 +1,42 @@
+{
+	"version": "v4",
+	"repo": "borisyankov/DefinitelyTyped",
+	"ref": "master",
+	"path": "typings",
+	"bundle": "typings/tsd.d.ts",
+	"installed": {
+		"react/react.d.ts": {
+			"commit": "55c750ace821f85e6643bbdb249dbd0b15a3df78"
+		},
+		"react/react-dom.d.ts": {
+			"commit": "fa04c80f4a889613b96cb4f283848c61a9f64233"
+		},
+		"moment/moment.d.ts": {
+			"commit": "55c750ace821f85e6643bbdb249dbd0b15a3df78"
+		},
+		"react-bootstrap/react-bootstrap.d.ts": {
+			"commit": "55c750ace821f85e6643bbdb249dbd0b15a3df78"
+		},
+		"react-redux/react-redux.d.ts": {
+			"commit": "55c750ace821f85e6643bbdb249dbd0b15a3df78"
+		},
+		"redux/redux.d.ts": {
+			"commit": "55c750ace821f85e6643bbdb249dbd0b15a3df78"
+		},
+		"redux-thunk/redux-thunk.d.ts": {
+			"commit": "55c750ace821f85e6643bbdb249dbd0b15a3df78"
+		},
+		"moment/moment-node.d.ts": {
+			"commit": "55c750ace821f85e6643bbdb249dbd0b15a3df78"
+		},
+		"lodash/lodash.d.ts": {
+			"commit": "55c750ace821f85e6643bbdb249dbd0b15a3df78"
+		},
+		"moment-range/moment-range.d.ts": {
+			"commit": "55c750ace821f85e6643bbdb249dbd0b15a3df78"
+		},
+		"jquery/jquery.d.ts": {
+			"commit": "55c750ace821f85e6643bbdb249dbd0b15a3df78"
+		}
+	}
+}
