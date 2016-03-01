@@ -1,5 +1,6 @@
 import * as React from "react";
 import moment from "moment";
+import "moment-duration-format";
 import { Grid, Row, Col, Panel, Glyphicon } from "react-bootstrap";
 
 import { ITask, IProject } from "../../model/store";
@@ -40,6 +41,10 @@ class WorkingDay extends React.Component<IWorkingDayProps, IWorkingDayState> {
     }
 
     renderTask(task:ITask) {
+        let start = DateUtil.getDate(task.startDate);
+        let end:moment.Moment = DateUtil.getDate(task.endDate);
+        let workDuration = moment.duration(end.diff(start)).format("HH:mm");
+
         return (
             <Row>
                 <Col md={2}>{DateUtil.extractTime(task.startDate)} - {DateUtil.extractTime(task.endDate)}</Col>
@@ -48,7 +53,7 @@ class WorkingDay extends React.Component<IWorkingDayProps, IWorkingDayState> {
                     <div>{task.description}</div>
                 </Col>
                 <Col md={2} className="text-right">
-                    <div>workTime</div>
+                    <div>{workDuration}</div>
                     <div>breakTime</div>
                 </Col>
             </Row>
