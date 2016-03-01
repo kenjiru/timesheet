@@ -78,7 +78,7 @@ class CreateTask extends React.Component<ICreateTaskProps, ICreateTaskState> {
 
     renderProjects() {
         return _.map(this.props.projects, (project:IProject) => (
-            <option key={project.id} value={project.id}>{project.name}</option>
+            <option key={project.projectId} value={project.projectId}>{project.name}</option>
         ));
     }
 
@@ -119,12 +119,11 @@ class CreateTask extends React.Component<ICreateTaskProps, ICreateTaskState> {
         let taskInterval = this.computeTaskInterval();
 
         let task:ITask = {
-            id: IdUtil.newId(),
+            taskId: IdUtil.newId(),
             projectId: state.projectId,
             startDate: taskInterval.startDate,
             endDate: taskInterval.endDate,
-            description: state.description,
-            tagIds: [ state.tagId ]
+            description: state.description
         };
 
         this.props.dispatch(addNewTask(task));

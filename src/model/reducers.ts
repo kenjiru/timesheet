@@ -7,11 +7,15 @@ import { IAction, ADD_TASK } from "./actions";
 let defaultStore = {
     tasks: [],
     projects: [{
-        id: IdUtil.newId(),
-        name: "Control Panel"
+        projectId: IdUtil.newId(),
+        name: "Control Panel",
+        employer: "MobFox",
+        description: ""
     }, {
-        id: IdUtil.newId(),
-        name: "Private"
+        projectId: IdUtil.newId(),
+        name: "Private",
+        employer: "",
+        description: ""
     }]
 };
 

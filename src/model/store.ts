@@ -10,33 +10,30 @@ export interface IStore {
 }
 
 export interface IProject {
-    id: string,
+    projectId: string,
     name: string,
-    client?: string,
-    description?: string,
-    location?: string,
-    rate?: string
+    employer: string,
+    description: string
 }
 
 export interface ITask {
-    id: string,
+    taskId: string,
     projectId: string,
     startDate: string,
     endDate: string,
-    description: string,
-    tagIds: string[]
+    description: string
 }
 
 interface ITag {
-    id: string,
-    label: string
+    tagId: string,
+    name: string
 }
 
 interface IBreak {
-    id: string,
+    breakId: string,
     taskId: string,
-    date: string,
-    startTime: string,
+    startDate: string,
+    endDate: string,
     endTime: string,
     description: string
 }
