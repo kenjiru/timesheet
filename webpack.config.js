@@ -45,6 +45,9 @@ var config = {
 				),
 				include: src_dir
 			}, {
+				test: /\.json$/,
+				loader: "json-loader"
+			},{
 				test: /\.less$/,
 				loader: envDep(
 					"style-loader!css-loader!less-loader",
