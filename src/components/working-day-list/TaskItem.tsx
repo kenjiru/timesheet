@@ -49,8 +49,8 @@ class TaskItem extends React.Component<ITaskItemProps, ITaskItemState> {
                         <div>{tagsString}</div>
                     </Col>
                     <Col md={2} className="text-right">
-                        <div>{this.formatDuration(workDuration)}</div>
-                        <div>{this.formatDuration(breakDuration)}</div>
+                        <div>{DateUtil.formatDuration(workDuration)}</div>
+                        <div>{DateUtil.formatDuration(breakDuration)}</div>
                     </Col>
                 </Row>
 
@@ -77,7 +77,7 @@ class TaskItem extends React.Component<ITaskItemProps, ITaskItemState> {
 
     renderBreak(breakItem:IBreak, index:number) {
         let bsStyle = index%2 == 1 ? "warning" : null;
-        let breakDuration = this.computeDuration(breakItem);
+        let breakDuration = DateUtil.computeDuration(breakItem);
 
         return (
             <ListGroupItem key={index} bsStyle={bsStyle}>
@@ -89,7 +89,7 @@ class TaskItem extends React.Component<ITaskItemProps, ITaskItemState> {
                         <div>breakDescription</div>
                     </Col>
                     <Col md={2} className="text-right">
-                        <div>{this.formatDuration(breakDuration)}</div>
+                        <div>{DateUtil.formatDuration(breakDuration)}</div>
                     </Col>
                 </Row>
             </ListGroupItem>
@@ -122,36 +122,14 @@ class TaskItem extends React.Component<ITaskItemProps, ITaskItemState> {
 
     computeWorkDuration():moment.Duration {
         let task = this.props.task;
-        let workDuration = this.computeDuration(task);
+        let workDuration = DateUtil.computeDuration(task);
         let breakDuration = this.computeBreakDuration();
 
         return workDuration.subtract(breakDuration);
     }
 
     computeBreakDuration():moment.Duration {
-        return this.computeTotalDuration(this.props.breaks);
-    }
-
-    computeTotalDuration(entities:ITask[]|IBreak[]):moment.Duration {
-        let totalDuration = moment.duration();
-
-        _.each(entities, (entity: ITask|IBreak) => {
-            let duration = this.computeDuration(entity);
-            totalDuration.add(duration);
-        });
-
-        return totalDuration;
-    }
-
-    computeDuration(entity:ITask|IBreak):moment.Duration {
-        let start:moment.Moment = DateUtil.getDate(entity.startDate);
-        let end:moment.Moment = DateUtil.getDate(entity.endDate);
-
-        return moment.duration(end.diff(start));
-    }
-
-    formatDuration(duration:moment.Duration) {
-        return duration.format("HH:mm");
+        return DateUtil.computeTotalDuration(this.props.breaks);
     }
 }
 
