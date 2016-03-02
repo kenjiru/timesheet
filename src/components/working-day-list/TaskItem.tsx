@@ -30,8 +30,10 @@ class TaskItem extends React.Component<ITaskItemProps, ITaskItemState> {
 
         let buttonText = this.state.showBreaks ? "Hide Breaks" : "Show Breaks";
 
+        let bsStyle = this.props.isOdd ? "warning" : null;
+
         return (
-            <Callout key={task.taskId} className="task-item">
+            <Callout key={task.taskId} bsStyle={bsStyle} className="task-item">
                 <Row>
                     <Col md={2}>
                         <div>{DateUtil.extractTime(task.startDate)} - {DateUtil.extractTime(task.endDate)}</div>
@@ -60,7 +62,7 @@ class TaskItem extends React.Component<ITaskItemProps, ITaskItemState> {
 
     renderBreaks(taskId:string) {
         let breaks:IBreak[] = this.computeBreaks(taskId);
-        let breakElements = _.map(breaks, breakItem => this.renderBreak(breakItem));
+        let breakElements = _.map(breaks, (breakItem:IBreak, index:number) => this.renderBreak(breakItem, index));
 
         return (
             <Collapse in={this.state.showBreaks}>
@@ -73,13 +75,15 @@ class TaskItem extends React.Component<ITaskItemProps, ITaskItemState> {
         )
     }
 
-    renderBreak(breakItem:IBreak) {
+    renderBreak(breakItem:IBreak, index:number) {
+        let bsStyle = index%2 == 1 ? "warning" : null;
+
         let start:moment.Moment = DateUtil.getDate(breakItem.startDate);
         let end:moment.Moment = DateUtil.getDate(breakItem.endDate);
         let breakDuration = moment.duration(end.diff(start)).format("HH:mm");
 
         return (
-            <ListGroupItem>
+            <ListGroupItem key={index} bsStyle={bsStyle}>
                 <Row>
                     <Col md={2}>
                         <div>{DateUtil.extractTime(breakItem.startDate)} - {DateUtil.extractTime(breakItem.endDate)}</div>
@@ -129,7 +133,8 @@ interface ITaskItemProps extends React.Props<TaskItem> {
     projects: IProject[],
     tags: ITag[],
     taskTags: ITaskTag[],
-    breaks: IBreak[]
+    breaks: IBreak[],
+    isOdd: boolean
 }
 interface ITaskItemState {
     showBreaks?: boolean

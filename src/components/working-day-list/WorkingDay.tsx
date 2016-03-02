@@ -11,7 +11,7 @@ import TaskItem from "./TaskItem";
 class WorkingDay extends React.Component<IWorkingDayProps, IWorkingDayState> {
     render() {
         return (
-            <Panel className="working-day" header={this.renderPanelHeader()}>
+            <Panel className="working-day" header={this.renderPanelHeader()} collapsible defaultExpanded={true}>
                 {this.renderTasks()}
             </Panel>
         )
@@ -40,9 +40,9 @@ class WorkingDay extends React.Component<IWorkingDayProps, IWorkingDayState> {
     }
 
     renderTasks() {
-        return _.map(this.props.workingDay.tasks, (task:ITask) => (
-            <TaskItem task={task} projects={this.props.projects} breaks={this.props.breaks} tags={this.props.tags}
-                      taskTags={this.props.taskTags}/>
+        return _.map(this.props.workingDay.tasks, (task:ITask, index:number) => (
+            <TaskItem key={index} task={task} projects={this.props.projects} breaks={this.props.breaks}
+                      tags={this.props.tags} taskTags={this.props.taskTags} isOdd={index%2 == 1}/>
         ));
     }
 
@@ -65,9 +65,7 @@ interface IWorkingDayProps extends React.Props<WorkingDay> {
     breaks: IBreak[]
 }
 
-interface IWorkingDayState {
-    showBreaks?: boolean
-}
+interface IWorkingDayState {}
 
 export interface IWorkingDay {
     tasks: ITask[]
