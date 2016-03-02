@@ -1,15 +1,26 @@
 import * as React from "react";
 import moment from "moment";
 import "moment-duration-format";
-import { Grid, Row, Col, Panel, Glyphicon } from "react-bootstrap";
+import { Grid, Row, Col, Panel, Collapse, ListGroup, ListGroupItem, Glyphicon, Button } from "react-bootstrap";
 
-import { ITask, IProject, ITag, ITaskTag } from "../../model/store";
+import Callout from "../../widgets/callout/Callout";
+import { ITask, IProject, ITag, ITaskTag, IBreak } from "../../model/store";
 import DateUtil from "../../utils/DateUtil";
 
+import "./WorkingDay.less";
+
 class WorkingDay extends React.Component<IWorkingDayProps, IWorkingDayState> {
+    constructor(props:IWorkingDayProps) {
+        super(props);
+
+        this.state = {
+            showBreaks: false
+        };
+    }
+
     render() {
         return (
-            <Panel className="task-item" header={this.renderPanelHeader()}>
+            <Panel className="working-day" header={this.renderPanelHeader()}>
                 {this.renderTasks()}
             </Panel>
         )
@@ -49,22 +60,74 @@ class WorkingDay extends React.Component<IWorkingDayProps, IWorkingDayState> {
         let tagsString = this.computeTaskTags(task.taskId);
         let projectName = this.computeProjectName(task.projectId);
 
+        let buttonText = this.state.showBreaks ? "Hide Breaks" : "Show Breaks";
+
         return (
-            <Row key={task.taskId}>
-                <Col md={2}>{DateUtil.extractTime(task.startDate)} - {DateUtil.extractTime(task.endDate)}</Col>
-                <Col md={7}>
-                    <div>{projectName}</div>
-                    <div>{task.description}</div>
-                </Col>
-                <Col md={1}>
-                    <div>{tagsString}</div>
-                </Col>
-                <Col md={2} className="text-right">
-                    <div>{workDuration}</div>
-                    <div>breakTime</div>
-                </Col>
-            </Row>
+            <Callout key={task.taskId} className="task-item">
+                <Row>
+                    <Col md={2}>
+                        <div>{DateUtil.extractTime(task.startDate)} - {DateUtil.extractTime(task.endDate)}</div>
+                        <div>
+                            <Button bsSize="xsmall" onClick={this.handleShowBreaks.bind(this)}>{buttonText}</Button>
+                        </div>
+                    </Col>
+                    <Col md={7}>
+                        <div>{projectName}</div>
+                        <div>{task.description}</div>
+                    </Col>
+                    <Col md={1}>
+                        <div>{tagsString}</div>
+                    </Col>
+                    <Col md={2} className="text-right">
+                        <div>{workDuration}</div>
+                        <div>breakTime</div>
+                    </Col>
+                </Row>
+
+                {this.renderBreaks(task.taskId)}
+            </Callout>
         )
+    }
+
+    renderBreaks(taskId:string) {
+        let breaks:IBreak[] = this.computeBreaks(taskId);
+        let breakElements = _.map(breaks, breakItem => this.renderBreak(breakItem));
+
+        return (
+            <Collapse className="task-breaks" in={this.state.showBreaks}>
+                <ListGroup>
+                    {breakElements}
+                </ListGroup>
+            </Collapse>
+        )
+    }
+
+    renderBreak(breakItem:IBreak) {
+        return (
+            <ListGroupItem>
+                <Row>
+                    <Col md={2}>
+                        <div>{DateUtil.extractTime(breakItem.startDate)} - {DateUtil.extractTime(breakItem.endDate)}</div>
+                    </Col>
+                    <Col md={8}>
+                        <div>breakDescription</div>
+                    </Col>
+                    <Col md={2} className="text-right">
+                        <div>breakDuration</div>
+                    </Col>
+                </Row>
+            </ListGroupItem>
+        )
+    }
+
+    handleShowBreaks() {
+        this.setState({
+            showBreaks: !this.state.showBreaks
+        });
+    }
+
+    computeBreaks(taskId:string):IBreak[] {
+        return _.filter(this.props.breaks, (breakItem: IBreak) => breakItem.taskId == taskId);
     }
 
     computeTaskTags(taskId:string):string {
@@ -100,10 +163,12 @@ interface IWorkingDayProps extends React.Props<WorkingDay> {
     workingDay: IWorkingDay,
     projects: IProject[],
     tags: ITag[],
-    taskTags: ITaskTag[]
+    taskTags: ITaskTag[],
+    breaks: IBreak[]
 }
 
 interface IWorkingDayState {
+    showBreaks?: boolean
 }
 
 export interface IWorkingDay {
