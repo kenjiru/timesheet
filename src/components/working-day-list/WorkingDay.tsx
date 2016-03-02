@@ -27,13 +27,16 @@ class WorkingDay extends React.Component<IWorkingDayProps, IWorkingDayState> {
             date = daySummary.startDate;
         }
 
+        let workDuration = this.computeWorkDuration();
+        let breakDuration = this.computeBreakDuration();
+
         return (
             <Row>
                 <Col md={9}>{date}</Col>
                 <Col md={1}>Tags</Col>
                 <Col md={2} className="text-right">
-                    <div>totalDayWorkTime</div>
-                    <div>totalDayBreakTime</div>
+                    <div>{DateUtil.formatDuration(workDuration)}</div>
+                    <div>{DateUtil.formatDuration(breakDuration)}</div>
                 </Col>
             </Row>
         )
@@ -58,6 +61,26 @@ class WorkingDay extends React.Component<IWorkingDayProps, IWorkingDayState> {
         daySummary.endDate = DateUtil.extractDate(tasks[tasks.length-1].endDate);
 
         return daySummary;
+    }
+
+    computeWorkDuration():moment.Duration {
+        let workingDuration = DateUtil.computeTotalDuration(this.props.tasks);
+        let breakDuration = this.computeBreakDuration();
+
+        return workingDuration.subtract(breakDuration);
+    }
+
+    computeBreakDuration():moment.Duration {
+        let totalBreakDuration = moment.duration();
+
+        _.each(this.props.tasks, (task:ITask) => {
+            let breaks = _.filter(this.props.breaks, (breakItem: IBreak) => breakItem.taskId == task.taskId);
+            let breakDuration = DateUtil.computeTotalDuration(breaks);
+
+            totalBreakDuration.add(breakDuration);
+        });
+
+        return totalBreakDuration;
     }
 }
 
