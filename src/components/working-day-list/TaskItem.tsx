@@ -129,14 +129,18 @@ class TaskItem extends React.Component<ITaskItemProps, ITaskItemState> {
     }
 
     computeBreakDuration():moment.Duration {
-        let totalBreakDuration = moment.duration();
+        return this.computeTotalDuration(this.props.breaks);
+    }
 
-        _.each(this.props.breaks, (breakItem: IBreak) => {
-            let breakDuration = this.computeDuration(breakItem);
-            totalBreakDuration.add(breakDuration);
+    computeTotalDuration(entities:ITask[]|IBreak[]):moment.Duration {
+        let totalDuration = moment.duration();
+
+        _.each(entities, (entity: ITask|IBreak) => {
+            let duration = this.computeDuration(entity);
+            totalDuration.add(duration);
         });
 
-        return totalBreakDuration;
+        return totalDuration;
     }
 
     computeDuration(entity:ITask|IBreak):moment.Duration {
