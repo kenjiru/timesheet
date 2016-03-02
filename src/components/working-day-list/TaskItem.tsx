@@ -21,16 +21,15 @@ class TaskItem extends React.Component<ITaskItemProps, ITaskItemState> {
 
     render() {
         let task:ITask = this.props.task;
-        let start:moment.Moment = DateUtil.getDate(task.startDate);
-        let end:moment.Moment = DateUtil.getDate(task.endDate);
-        let workDuration = moment.duration(end.diff(start)).format("HH:mm");
+
+        let bsStyle = this.props.isOdd ? "warning" : null;
+        let buttonText = this.state.showBreaks ? "Hide Breaks" : "Show Breaks";
+
+        let workDuration = this.computeWorkDuration();
+        let breakDuration = this.computeBreakDuration();
 
         let tagsString = this.computeTaskTags(task.taskId);
         let projectName = this.computeProjectName(task.projectId);
-
-        let buttonText = this.state.showBreaks ? "Hide Breaks" : "Show Breaks";
-
-        let bsStyle = this.props.isOdd ? "warning" : null;
 
         return (
             <Callout key={task.taskId} bsStyle={bsStyle} className="task-item">
@@ -50,19 +49,20 @@ class TaskItem extends React.Component<ITaskItemProps, ITaskItemState> {
                         <div>{tagsString}</div>
                     </Col>
                     <Col md={2} className="text-right">
-                        <div>{workDuration}</div>
-                        <div>breakTime</div>
+                        <div>{this.formatDuration(workDuration)}</div>
+                        <div>{this.formatDuration(breakDuration)}</div>
                     </Col>
                 </Row>
 
-                {this.renderBreaks(task.taskId)}
+                {this.renderBreaks()}
             </Callout>
         )
     }
 
-    renderBreaks(taskId:string) {
-        let breaks:IBreak[] = this.computeBreaks(taskId);
-        let breakElements = _.map(breaks, (breakItem:IBreak, index:number) => this.renderBreak(breakItem, index));
+    renderBreaks() {
+        let breakElements = _.map(this.props.breaks, (breakItem:IBreak, index:number) => {
+            return this.renderBreak(breakItem, index);
+        });
 
         return (
             <Collapse in={this.state.showBreaks}>
@@ -77,10 +77,7 @@ class TaskItem extends React.Component<ITaskItemProps, ITaskItemState> {
 
     renderBreak(breakItem:IBreak, index:number) {
         let bsStyle = index%2 == 1 ? "warning" : null;
-
-        let start:moment.Moment = DateUtil.getDate(breakItem.startDate);
-        let end:moment.Moment = DateUtil.getDate(breakItem.endDate);
-        let breakDuration = moment.duration(end.diff(start)).format("HH:mm");
+        let breakDuration = this.computeDuration(breakItem);
 
         return (
             <ListGroupItem key={index} bsStyle={bsStyle}>
@@ -92,7 +89,7 @@ class TaskItem extends React.Component<ITaskItemProps, ITaskItemState> {
                         <div>breakDescription</div>
                     </Col>
                     <Col md={2} className="text-right">
-                        <div>{breakDuration}</div>
+                        <div>{this.formatDuration(breakDuration)}</div>
                     </Col>
                 </Row>
             </ListGroupItem>
@@ -103,10 +100,6 @@ class TaskItem extends React.Component<ITaskItemProps, ITaskItemState> {
         this.setState({
             showBreaks: !this.state.showBreaks
         });
-    }
-
-    computeBreaks(taskId:string):IBreak[] {
-        return _.filter(this.props.breaks, (breakItem: IBreak) => breakItem.taskId == taskId);
     }
 
     computeTaskTags(taskId:string):string {
@@ -126,6 +119,36 @@ class TaskItem extends React.Component<ITaskItemProps, ITaskItemState> {
             return project.name;
         }
     }
+
+    computeWorkDuration():moment.Duration {
+        let task = this.props.task;
+        let workDuration = this.computeDuration(task);
+        let breakDuration = this.computeBreakDuration();
+
+        return workDuration.subtract(breakDuration);
+    }
+
+    computeBreakDuration():moment.Duration {
+        let totalBreakDuration = moment.duration();
+
+        _.each(this.props.breaks, (breakItem: IBreak) => {
+            let breakDuration = this.computeDuration(breakItem);
+            totalBreakDuration.add(breakDuration);
+        });
+
+        return totalBreakDuration;
+    }
+
+    computeDuration(entity:ITask|IBreak):moment.Duration {
+        let start:moment.Moment = DateUtil.getDate(entity.startDate);
+        let end:moment.Moment = DateUtil.getDate(entity.endDate);
+
+        return moment.duration(end.diff(start));
+    }
+
+    formatDuration(duration:moment.Duration) {
+        return duration.format("HH:mm");
+    }
 }
 
 interface ITaskItemProps extends React.Props<TaskItem> {
@@ -133,7 +156,7 @@ interface ITaskItemProps extends React.Props<TaskItem> {
     projects: IProject[],
     tags: ITag[],
     taskTags: ITaskTag[],
-    breaks: IBreak[],
+    breaks: IBreak[], // this refers only to the breaks for this task
     isOdd: boolean
 }
 interface ITaskItemState {

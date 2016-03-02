@@ -40,10 +40,14 @@ class WorkingDay extends React.Component<IWorkingDayProps, IWorkingDayState> {
     }
 
     renderTasks() {
-        return _.map(this.props.workingDay.tasks, (task:ITask, index:number) => (
-            <TaskItem key={index} task={task} projects={this.props.projects} breaks={this.props.breaks}
-                      tags={this.props.tags} taskTags={this.props.taskTags} isOdd={index%2 == 1}/>
-        ));
+        return _.map(this.props.workingDay.tasks, (task:ITask, index:number) => {
+            let breaks = _.filter(this.props.breaks, (breakItem: IBreak) => breakItem.taskId == task.taskId);
+
+            return (
+                <TaskItem key={index} task={task} projects={this.props.projects} breaks={breaks}
+                          tags={this.props.tags} taskTags={this.props.taskTags} isOdd={index%2 == 1}/>
+            )
+        });
     }
 
     computeDaySummary():IDaySummary {
