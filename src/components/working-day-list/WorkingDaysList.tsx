@@ -3,7 +3,7 @@ import moment from "moment";
 
 import { ITask, IProject, ITag, ITaskTag, IBreak } from "../../model/store";
 import DateUtil from "../../utils/DateUtil";
-import WorkingDay, { IWorkingDay } from "./WorkingDay";
+import WorkingDay from "./WorkingDay";
 
 import "./WorkingDaysList.less";
 
@@ -34,7 +34,7 @@ class WorkingDaysList extends React.Component<IWorkingDaysListProps, IWorkingDay
 
     renderWorkingDays() {
         return _.map(this.state.workingDays, (workingDay:IWorkingDay, index:number) => (
-            <WorkingDay key={index} workingDay={workingDay} projects={this.props.projects} breaks={this.props.breaks}
+            <WorkingDay key={index} tasks={workingDay.tasks} projects={this.props.projects} breaks={this.props.breaks}
                         tags={this.props.tags} taskTags={this.props.taskTags}/>
         ));
     }
@@ -57,6 +57,10 @@ class WorkingDaysList extends React.Component<IWorkingDaysListProps, IWorkingDay
 
         return _.values<IWorkingDay>(workingDaysMap);
     }
+}
+
+interface IWorkingDay {
+    tasks: ITask[]
 }
 
 interface IWorkingDaysListProps extends React.Props<WorkingDaysList> {

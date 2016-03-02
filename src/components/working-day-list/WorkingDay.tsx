@@ -40,7 +40,7 @@ class WorkingDay extends React.Component<IWorkingDayProps, IWorkingDayState> {
     }
 
     renderTasks() {
-        return _.map(this.props.workingDay.tasks, (task:ITask, index:number) => {
+        return _.map(this.props.tasks, (task:ITask, index:number) => {
             let breaks = _.filter(this.props.breaks, (breakItem: IBreak) => breakItem.taskId == task.taskId);
 
             return (
@@ -51,18 +51,18 @@ class WorkingDay extends React.Component<IWorkingDayProps, IWorkingDayState> {
     }
 
     computeDaySummary():IDaySummary {
-        let workingDay:IWorkingDay = this.props.workingDay;
+        let tasks = this.props.tasks;
         let daySummary:IDaySummary = {} as IDaySummary;
 
-        daySummary.startDate = DateUtil.extractDate(workingDay.tasks[0].startDate);
-        daySummary.endDate = DateUtil.extractDate(workingDay.tasks[0].endDate);
+        daySummary.startDate = DateUtil.extractDate(tasks[0].startDate);
+        daySummary.endDate = DateUtil.extractDate(tasks[tasks.length-1].endDate);
 
         return daySummary;
     }
 }
 
 interface IWorkingDayProps extends React.Props<WorkingDay> {
-    workingDay: IWorkingDay,
+    tasks: ITask[],
     projects: IProject[],
     tags: ITag[],
     taskTags: ITaskTag[],
@@ -70,10 +70,6 @@ interface IWorkingDayProps extends React.Props<WorkingDay> {
 }
 
 interface IWorkingDayState {}
-
-export interface IWorkingDay {
-    tasks: ITask[]
-}
 
 interface IDaySummary {
     startDate: string,
