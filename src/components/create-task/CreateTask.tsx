@@ -7,7 +7,7 @@ import DatePicker from "../../widgets/date-picker/DatePicker";
 import Callout from "../../widgets/callout/Callout";
 
 import { ITask, IProject, ITag, ITaskTag, IBreak } from "../../model/store";
-import { IAction, addNewTask, addNewTaskTag, addNewBreak } from "../../model/actions";
+import { IAction, addTask, addTaskTag, addBreak } from "../../model/actions";
 import IdUtil from "../../utils/IdUtil";
 
 class CreateTask extends React.Component<ICreateTaskProps, ICreateTaskState> {
@@ -162,10 +162,10 @@ class CreateTask extends React.Component<ICreateTaskProps, ICreateTaskState> {
         };
 
         let breaks:IBreak[] = this.computeBreaks(task.taskId);
-        _.each(breaks, (breakItem:IBreak) => this.props.dispatch(addNewBreak(breakItem)));
+        _.each(breaks, (breakItem:IBreak) => this.props.dispatch(addBreak(breakItem)));
 
-        this.props.dispatch(addNewTaskTag(taskTag));
-        this.props.dispatch(addNewTask(task));
+        this.props.dispatch(addTaskTag(taskTag));
+        this.props.dispatch(addTask(task));
     }
 
     computeBreaks(taskId):IBreak[] {
