@@ -3,7 +3,7 @@ import { Grid, Row, Col, Modal, Panel, Button, Input, ListGroup, ListGroupItem, 
 
 import IdUtil from "../../utils/IdUtil";
 import { ITag } from "../../model/store";
-import { IAction, addTag } from "../../model/actions";
+import { IAction, addTag, removeTag } from "../../model/actions";
 
 import "./TagsManager.less";
 
@@ -63,7 +63,9 @@ class TagsManager extends React.Component<ITagsManagerProps, ITagsManagerState> 
                     <Col xs={1}><Glyphicon glyph="tag"/></Col>
                     <Col xs={10}>{tag.name}</Col>
                     <Col xs={1} className="remove-button-container text-right">
-                        <Button bsSize="xsmall" className="remove"><Glyphicon glyph="remove"/></Button>
+                        <Button bsSize="xsmall" className="remove" onClick={this.handleDeleteTag.bind(this, tag.tagId)}>
+                            <Glyphicon glyph="remove"/>
+                        </Button>
                     </Col>
                 </Row>
             </ListGroupItem>
@@ -105,6 +107,10 @@ class TagsManager extends React.Component<ITagsManagerProps, ITagsManagerState> 
             showCreateTag: false,
             tagName: ""
         });
+    }
+
+    handleDeleteTag(tagId:string) {
+        this.props.dispatch(removeTag(tagId));
     }
 
     handleShowCreateTag() {

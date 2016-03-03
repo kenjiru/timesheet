@@ -38,3 +38,11 @@ export function addTag(tag:ITag): IAction {
         payload: tag
     }
 }
+
+export const REMOVE_TAG = "REMOVE_TAG";
+export function removeTag(tagId:string): IAction {
+    return {
+        type: REMOVE_TAG,
+        payload: tagId
+    }
+}
