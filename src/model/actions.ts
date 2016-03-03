@@ -46,3 +46,11 @@ export function removeTag(tagId:string): IAction {
         payload: tagId
     }
 }
+
+export const UPDATE_TAG = "UPDATE_TAG";
+export function updateTag(tag:ITag): IAction {
+    return {
+        type: UPDATE_TAG,
+        payload: tag
+    }
+}

@@ -3,7 +3,7 @@ import { Grid, Row, Col, Modal, Panel, Button, Input, ListGroup, ListGroupItem, 
 
 import IdUtil from "../../utils/IdUtil";
 import { ITag } from "../../model/store";
-import { IAction, addTag, removeTag } from "../../model/actions";
+import { IAction, addTag, removeTag, updateTag } from "../../model/actions";
 
 import "./TagsManager.less";
 
@@ -13,7 +13,8 @@ class TagsManager extends React.Component<ITagsManagerProps, ITagsManagerState> 
 
         this.state = {
             showCreateTag: false,
-            tagName: null
+            tagName: null,
+            editTagId: null
         }
     }
 
@@ -30,7 +31,7 @@ class TagsManager extends React.Component<ITagsManagerProps, ITagsManagerState> 
                     {this.renderTags()}
 
                     <div className="add-button-container text-right">
-                        <Button className="remove" bsSize="xsmall" onClick={this.handleShowCreateTag.bind(this)}>
+                        <Button bsStyle="primary" className="add" bsSize="xsmall" onClick={this.handleShowCreateTag.bind(this)}>
                             <Glyphicon glyph="plus"/>
                         </Button>
                     </div>
@@ -57,19 +58,51 @@ class TagsManager extends React.Component<ITagsManagerProps, ITagsManagerState> 
     }
 
     renderDefinedTags() {
-        return _.map(this.props.tags, (tag:ITag) => (
+        return _.map(this.props.tags, (tag:ITag) => {
+            if (this.state.editTagId == tag.tagId) {
+                return this.renderUpdateTag(tag);
+            } else {
+                return this.renderTag(tag);
+            }
+        });
+    }
+
+    renderTag(tag:ITag) {
+        return (
             <ListGroupItem key={tag.tagId} className="tag-item">
                 <Row>
                     <Col xs={1}><Glyphicon glyph="tag"/></Col>
-                    <Col xs={10}>{tag.name}</Col>
+                    <Col xs={10}>
+                        <div onClick={this.handleShowEditTag.bind(this, tag.tagId, tag.name)}>{tag.name}</div>
+                    </Col>
                     <Col xs={1} className="remove-button-container text-right">
-                        <Button bsSize="xsmall" className="remove" onClick={this.handleDeleteTag.bind(this, tag.tagId)}>
+                        <Button bsStyle="danger" bsSize="xsmall" className="remove"
+                                onClick={this.handleDeleteTag.bind(this, tag.tagId)}>
                             <Glyphicon glyph="remove"/>
                         </Button>
                     </Col>
                 </Row>
             </ListGroupItem>
-        ));
+        )
+    }
+
+    renderUpdateTag(tag:ITag) {
+        return (
+            <ListGroupItem key={"edit-" + tag.tagId} className="tag-item edit-tag">
+                <Row>
+                    <Col xs={1}><Glyphicon glyph="tag"/></Col>
+                    <Col xs={10}>
+                        <Input type="text" bsSize="small" placeholder="Tag name" value={this.state.tagName}
+                               onChange={this.handleTagNameChange.bind(this)}/>
+                    </Col>
+                    <Col xs={1} className="save-button-container text-right">
+                        <Button bsStyle="success" bsSize="xsmall" className="update" onClick={this.handleUpdateTag.bind(this)}>
+                            <Glyphicon glyph="ok"/>
+                        </Button>
+                    </Col>
+                </Row>
+            </ListGroupItem>
+        )
     }
 
     renderNewTag() {
@@ -86,7 +119,7 @@ class TagsManager extends React.Component<ITagsManagerProps, ITagsManagerState> 
                                onChange={this.handleTagNameChange.bind(this)}/>
                     </Col>
                     <Col xs={1} className="save-button-container text-right">
-                        <Button bsSize="xsmall" className="save" onClick={this.handleCreateTag.bind(this)}>
+                        <Button bsStyle="success" bsSize="xsmall" className="save" onClick={this.handleCreateTag.bind(this)}>
                             <Glyphicon glyph="ok"/>
                         </Button>
                     </Col>
@@ -109,6 +142,20 @@ class TagsManager extends React.Component<ITagsManagerProps, ITagsManagerState> 
         });
     }
 
+    handleUpdateTag() {
+        let updatedTag:ITag = {
+            tagId: this.state.editTagId,
+            name: this.state.tagName
+        };
+
+        this.props.dispatch(updateTag(updatedTag));
+
+        this.setState({
+            editTagId: null,
+            tagName: null
+        });
+    }
+
     handleDeleteTag(tagId:string) {
         this.props.dispatch(removeTag(tagId));
     }
@@ -116,6 +163,17 @@ class TagsManager extends React.Component<ITagsManagerProps, ITagsManagerState> 
     handleShowCreateTag() {
         this.setState({
             showCreateTag: !this.state.showCreateTag
+        });
+    }
+
+    handleShowEditTag(tagId, tagName) {
+        if (this.state.showCreateTag) {
+            return;
+        }
+
+        this.setState({
+            editTagId: tagId,
+            tagName: tagName
         });
     }
 
@@ -138,7 +196,8 @@ interface ITagsManagerProps extends React.Props<TagsManager> {
 
 interface ITagsManagerState {
     showCreateTag?: boolean,
-    tagName?: string
+    tagName?: string,
+    editTagId?: string
 }
 
 export default TagsManager;
