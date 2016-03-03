@@ -1,4 +1,4 @@
-import { ITask, ITaskTag, IBreak } from "./store";
+import { ITask, ITaskTag, IBreak, ITag } from "./store";
 
 export interface IAction {
     type: string,
@@ -28,5 +28,13 @@ export function addBreak(breakItem:IBreak): IAction {
     return {
         type: ADD_BREAK,
         payload: breakItem
+    }
+}
+
+export const ADD_TAG = "ADD_TAG";
+export function addTag(tag:ITag): IAction {
+    return {
+        type: ADD_TAG,
+        payload: tag
     }
 }

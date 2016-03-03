@@ -82,7 +82,8 @@ class CreateTask extends React.Component<ICreateTaskProps, ICreateTaskState> {
 
     renderManageTags() {
         if (this.state.showManageTags) {
-            return <TagsManager tags={this.props.tags} onClose={this.hideManageTags.bind(this)}/>
+            return <TagsManager tags={this.props.tags} onClose={this.hideManageTags.bind(this)}
+                                dispatch={this.props.dispatch}/>
         }
     }
 

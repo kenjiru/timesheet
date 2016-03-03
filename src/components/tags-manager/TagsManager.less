@@ -1,16 +1,31 @@
 .tags-manager {
 	.add-button-container {
-		padding-right: 8px;
+		padding-right: 9px;
 	}
 
 	.remove-button-container {
 		visibility: hidden;
 	}
 
+	.save-button-container {
+		vertical-align: middle;
+		line-height: 30px;
+	}
+
 	.tag-item {
 		&:hover {
 			.remove-button-container {
 				visibility: visible;
+			}
+		}
+	}
+
+	.new-tag {
+		.form-group {
+			margin-bottom: 0;
+
+			.form-control {
+				padding: 2px;
 			}
 		}
 	}
