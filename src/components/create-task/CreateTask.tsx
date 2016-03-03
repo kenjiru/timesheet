@@ -1,7 +1,8 @@
 import * as React from 'react';
 import moment from "moment";
-import { Grid, Row, Col, Panel, Button, Input, Glyphicon } from "react-bootstrap";
+import { Grid, Row, Col, Panel, Button, Input, ButtonInput, Glyphicon } from "react-bootstrap";
 
+import TagsManager from "../tags-manager/TagsManager";
 import DatePicker from "../../widgets/date-picker/DatePicker";
 import Callout from "../../widgets/callout/Callout";
 
@@ -18,7 +19,8 @@ class CreateTask extends React.Component<ICreateTaskProps, ICreateTaskState> {
             projectId: null,
             workingInterval: "08:30-12:30, 14:00-18:00",
             description: "Setting up the project",
-            tagId: "office"
+            tagId: "office",
+            showManageTags: false
         };
     }
 
@@ -56,12 +58,13 @@ class CreateTask extends React.Component<ICreateTaskProps, ICreateTaskState> {
                     </Col>
 
                     <Col md={1}>
-                        <Input type="select" label="Tags" placeholder="select" help="Identifies the location"
+                        <Input type="select" label="Tags" placeholder="select"
                                value={this.state.tagId} addonBefore={<Glyphicon glyph="tags"/>}
                                onChange={this.handleTagsChange.bind(this)}>
                             <option value="none">none</option>
                             {this.renderTags()}
                         </Input>
+                        <ButtonInput onClick={this.showManageTags.bind(this)}>Manage Tags</ButtonInput>
                     </Col>
 
                     <Col md={1} className="text-left">
@@ -71,8 +74,16 @@ class CreateTask extends React.Component<ICreateTaskProps, ICreateTaskState> {
                         </div>
                     </Col>
                 </Row>
+
+                {this.renderManageTags()}
             </Grid>
         )
+    }
+
+    renderManageTags() {
+        if (this.state.showManageTags) {
+            return <TagsManager tags={this.props.tags} onClose={this.hideManageTags.bind(this)}/>
+        }
     }
 
     renderProjects() {
@@ -85,6 +96,18 @@ class CreateTask extends React.Component<ICreateTaskProps, ICreateTaskState> {
         return _.map(this.props.tags, (tag:ITag) => (
             <option key={tag.tagId} value={tag.tagId}>{tag.name}</option>
         ));
+    }
+
+    showManageTags() {
+        this.setState({
+            showManageTags: true
+        });
+    }
+
+    hideManageTags() {
+        this.setState({
+            showManageTags: false
+        });
     }
 
     handleStartDateChanged(date:Date) {
@@ -208,7 +231,8 @@ interface ICreateTaskState {
     projectId?: string,
     workingInterval?: string,
     description?: string,
-    tagId?: string
+    tagId?: string,
+    showManageTags?: boolean
 }
 
 export default CreateTask;

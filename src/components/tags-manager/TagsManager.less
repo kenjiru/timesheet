@@ -1,0 +1,17 @@
+.tags-manager {
+	.add-button-container {
+		padding-right: 8px;
+	}
+
+	.remove-button-container {
+		visibility: hidden;
+	}
+
+	.tag-item {
+		&:hover {
+			.remove-button-container {
+				visibility: visible;
+			}
+		}
+	}
+}
