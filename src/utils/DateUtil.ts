@@ -20,6 +20,15 @@ class DateUtil {
         return moment.duration(end.diff(start));
     }
 
+    static computeTimeInterval(interval:string):ITimeInterval {
+        let periods = interval.split("-");
+
+        return {
+            startTime: periods[0].trim(),
+            endTime: periods[1].trim()
+        }
+    }
+
     static formatDuration(duration:moment.Duration) {
         return duration.format("HH:mm");
     }
@@ -35,6 +44,17 @@ class DateUtil {
     static extractTime(date:string):string {
         return moment(date, "DD/MM/YYYY HH:mm").format("HH:mm");
     }
+}
+
+
+export interface ITimeInterval {
+    startTime: string,
+    endTime: string
+}
+
+export interface IDateInterval {
+    startDate: string,
+    endDate: string
 }
 
 export default DateUtil;

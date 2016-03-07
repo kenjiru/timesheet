@@ -6,6 +6,7 @@ import TagsManager from "../tags-manager/TagsManager";
 import DatePicker from "../../widgets/date-picker/DatePicker";
 import Callout from "../../widgets/callout/Callout";
 
+import DateUtil, { IDateInterval, ITimeInterval } from "../../utils/DateUtil";
 import { ITask, IProject, ITag, ITaskTag, IBreak } from "../../model/store";
 import { IAction, addTask, addTaskTag, addBreak } from "../../model/actions";
 import IdUtil from "../../utils/IdUtil";
@@ -200,25 +201,8 @@ class CreateTask extends React.Component<ICreateTaskProps, ICreateTaskState> {
     computeWorkingPeriods():ITimeInterval[] {
         let workingIntervals = this.state.workingInterval.split(",");
 
-        return _.map(workingIntervals, (interval:string) => {
-            let periods = interval.split("-");
-
-            return {
-                startTime: periods[0].trim(),
-                endTime: periods[1].trim()
-            }
-        });
+        return _.map(workingIntervals, (interval:string) => DateUtil.computeTimeInterval(interval));
     }
-}
-
-interface ITimeInterval {
-    startTime: string,
-    endTime: string
-}
-
-interface IDateInterval {
-    startDate: string,
-    endDate: string
 }
 
 interface ICreateTaskProps {
