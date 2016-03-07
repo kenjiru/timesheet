@@ -1,11 +1,12 @@
 import 'babel-polyfill';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import { Grid, Row, Col } from "react-bootstrap";
-
 import { Provider } from "react-redux";
+import * as storage from "store";
+import { Grid, Row, Col, ButtonGroup, Button } from "react-bootstrap";
 
-import store from "./model/store";
+import store, { IStore } from "./model/store";
+import { updateStore } from "./model/actions";
 import TaskManager from "./components/task-manager/TaskManager";
 import CreateTask from "./components/create-task/CreateTask";
 
@@ -25,8 +26,16 @@ class App extends React.Component<IAppProps, IAppState> {
                 <div className="app">
                     <Grid className="app" fluid={true}>
                         <Row>
-                            <Col md={12}>
+                            <Col md={10}>
                                 <h1>Timesheet</h1>
+                            </Col>
+
+                            <Col md={2} className="text-right">
+                                <h1> </h1>
+                                <ButtonGroup>
+                                    <Button onClick={this.saveStore.bind(this)}>Save Store</Button>
+                                    <Button onClick={this.loadStore.bind(this)}>Load Store</Button>
+                                </ButtonGroup>
                             </Col>
                         </Row>
                     </Grid>
@@ -35,6 +44,20 @@ class App extends React.Component<IAppProps, IAppState> {
                 </div>
             </Provider>
         )
+    }
+
+    saveStore() {
+        let state:IStore = store.getState();
+
+        storage.set("store", state);
+        console.log("Save Store: ", state);
+    }
+
+    loadStore() {
+        let state: IStore = storage.get("store");
+
+        store.dispatch(updateStore(state));
+        console.log("Load Store: ", state);
     }
 }
 

@@ -1,4 +1,4 @@
-import { ITask, ITaskTag, IBreak, ITag } from "./store";
+import { IStore, ITask, ITaskTag, IBreak, ITag } from "./store";
 
 export interface IAction {
     type: string,
@@ -52,5 +52,13 @@ export function updateTag(tag:ITag): IAction {
     return {
         type: UPDATE_TAG,
         payload: tag
+    }
+}
+
+export const UPDATE_STORE = "UPDATE_STORE";
+export function updateStore(store:IStore): IAction {
+    return {
+        type: UPDATE_STORE,
+        payload: store
     }
 }

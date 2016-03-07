@@ -2,7 +2,7 @@ import _ from "lodash";
 import IdUtil from "../utils/IdUtil";
 
 import { IStore, ITag } from "./store";
-import { IAction, ADD_TASK, ADD_TASK_TAG, ADD_BREAK, ADD_TAG, REMOVE_TAG, UPDATE_TAG } from "./actions";
+import { IAction, ADD_TASK, ADD_TASK_TAG, ADD_BREAK, ADD_TAG, REMOVE_TAG, UPDATE_TAG, UPDATE_STORE } from "./actions";
 
 let defaultStore = {
     tasks: [],
@@ -76,6 +76,12 @@ export function mainReducer(store: IStore = defaultStore, action: IAction): ISto
 
             let tag = _.find(newStore.tags, (tag:ITag) => tag.tagId == newTag.tagId);
             tag.name = newTag.name;
+
+            return newStore;
+        }
+
+        case UPDATE_STORE: {
+            let newStore:IStore = _.cloneDeep(action.payload);
 
             return newStore;
         }
