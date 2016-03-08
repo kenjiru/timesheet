@@ -38,6 +38,13 @@ export function addBreak(breakItem:IBreak): IAction {
         payload: breakItem
     }
 }
+export const UPDATE_BREAK = "UPDATE_BREAK";
+export function updateBreak(breakItem:IBreak): IAction {
+    return {
+        type: UPDATE_BREAK,
+        payload: breakItem
+    }
+}
 
 export const ADD_TAG = "ADD_TAG";
 export function addTag(tag:ITag): IAction {

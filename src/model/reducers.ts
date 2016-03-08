@@ -1,8 +1,8 @@
 import _ from "lodash";
 import IdUtil from "../utils/IdUtil";
 
-import { IStore, ITag, ITask } from "./store";
-import { IAction, ADD_TASK, UPDATE_TASK, ADD_TASK_TAG, ADD_BREAK,
+import { IStore, ITag, ITask, IBreak } from "./store";
+import { IAction, ADD_TASK, UPDATE_TASK, ADD_TASK_TAG, ADD_BREAK, UPDATE_BREAK,
     ADD_TAG, REMOVE_TAG, UPDATE_TAG, UPDATE_STORE } from "./actions";
 
 let defaultStore = {
@@ -43,7 +43,9 @@ export function mainReducer(store: IStore = defaultStore, action: IAction): ISto
             let newStore = _.cloneDeep(store);
             let updatedTask:ITask = <ITask> action.payload;
 
-            newStore.tasks = _.map(newStore.tasks, (task: ITask) => task.taskId == updatedTask.taskId ? updatedTask : task);
+            newStore.tasks = _.map(newStore.tasks, (task: ITask) => (
+                task.taskId == updatedTask.taskId ? updatedTask : task)
+            );
 
             return newStore;
         }
@@ -60,6 +62,17 @@ export function mainReducer(store: IStore = defaultStore, action: IAction): ISto
             let newStore = _.cloneDeep(store);
 
             newStore.breaks.push(action.payload);
+
+            return newStore;
+        }
+
+        case UPDATE_BREAK: {
+            let updatedBreak:IBreak = <IBreak> action.payload;
+            let newStore = _.cloneDeep(store);
+
+            newStore.breaks = _.map(newStore.breaks, (breakItem: IBreak) => (
+                breakItem.breakId == updatedBreak.breakId ? updatedBreak : breakItem)
+            );
 
             return newStore;
         }
