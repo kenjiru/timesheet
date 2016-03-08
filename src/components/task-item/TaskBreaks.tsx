@@ -17,7 +17,11 @@ class TaskBreaks extends React.Component<ITaskBreaksProps, ITaskBreaksState> {
         )
     }
 
-    renderBreaks() {
+    renderBreaks():React.ReactElement<any>|React.ReactElement<any>[] {
+        if (this.props.breaks.length == 0) {
+            return <ListGroupItem key="no-breaks" bsStyle="warning">No breaks for this task</ListGroupItem>
+        }
+
         return _.map(this.props.breaks, (breakItem:IBreak, index:number) => {
             return this.renderBreak(breakItem, index);
         });
