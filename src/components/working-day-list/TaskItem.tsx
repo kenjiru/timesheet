@@ -4,9 +4,12 @@ import moment from "moment";
 import "moment-duration-format";
 import { Grid, Row, Col, Panel, Collapse, ListGroup, ListGroupItem, Glyphicon, Button } from "react-bootstrap";
 
+import store from "../../model/store";
+import { updateTask } from "../../model/actions";
 import Callout from "../../widgets/callout/Callout";
+import EditableText from "../../widgets/editable-text/EditableText";
 import { ITask, IProject, ITag, ITaskTag, IBreak } from "../../model/store";
-import DateUtil from "../../utils/DateUtil";
+import DateUtil, { ITimeInterval } from "../../utils/DateUtil";
 
 import "./TaskItem.less";
 
@@ -31,11 +34,15 @@ class TaskItem extends React.Component<ITaskItemProps, ITaskItemState> {
         let tagsString = this.computeTaskTags(task.taskId);
         let projectName = this.computeProjectName(task.projectId);
 
+        let taskInterval = DateUtil.extractTime(task.startDate) + " - " + DateUtil.extractTime(task.endDate);
+
         return (
             <Callout key={task.taskId} bsStyle={bsStyle} className="task-item">
                 <Row>
                     <Col md={2}>
-                        <div>{DateUtil.extractTime(task.startDate)} - {DateUtil.extractTime(task.endDate)}</div>
+                        <div>
+                            <EditableText value={taskInterval} onChange={this.handleTaskIntervalChange.bind(this)}/>
+                        </div>
                         <div>
                             <Button className="show-hide-button" bsSize="xsmall"
                                     onClick={this.handleShowBreaks.bind(this)}>{buttonText}</Button>
@@ -100,6 +107,16 @@ class TaskItem extends React.Component<ITaskItemProps, ITaskItemState> {
         this.setState({
             showBreaks: !this.state.showBreaks
         });
+    }
+
+    handleTaskIntervalChange(intervalStr: string) {
+        let task:ITask = _.clone(this.props.task);
+        let taskInterval:ITimeInterval = DateUtil.computeTimeInterval(intervalStr);
+
+        task.startDate = DateUtil.extractDate(task.startDate) + " " + taskInterval.startTime;
+        task.endDate = DateUtil.extractDate(task.endDate) + " " + taskInterval.endTime;
+
+        store.dispatch(updateTask(task));
     }
 
     computeTaskTags(taskId:string):string {

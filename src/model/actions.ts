@@ -15,6 +15,14 @@ export function addTask(task:ITask): IAction {
     }
 }
 
+export const UPDATE_TASK = "UPDATE_TASK";
+export function updateTask(task:ITask): IAction {
+    return {
+        type: UPDATE_TASK,
+        payload: task
+    }
+}
+
 export const ADD_TASK_TAG = "ADD_TASK_TAG";
 export function addTaskTag(taskTag:ITaskTag): IAction {
     return {
