@@ -13,6 +13,14 @@ class EditableText extends React.Component<IEditableTextProps, IEditableTextStat
         };
     }
 
+    componentDidUpdate() {
+        if (this.state.showEdit) {
+            let inputComponent:any = this.refs["editInput"];
+
+            inputComponent.refs["input"].focus();
+        }
+    }
+
     render() {
         return (
             <div className="editable-text">
@@ -40,18 +48,18 @@ class EditableText extends React.Component<IEditableTextProps, IEditableTextStat
     renderEdit() {
         return (
             <div className="input-container">
-                <Row>
-                    <Col xs={10}>
-                        <Input type="text" bsSize="small" placeholder="Enter value" value={this.state.value}
-                               onChange={this.handleValueChange.bind(this)}/>
-                    </Col>
-                    <Col xs={2} className="ok-button-container">
-                        <Button bsStyle="success" bsSize="xsmall" className="save" onClick={this.handleSaveChange.bind(this)}>
-                            <Glyphicon glyph="ok"/>
-                        </Button>
-                    </Col>
-                </Row>
+                <Input ref="editInput" type="text" value={this.state.value} addonAfter={this.renderSaveButton()}
+                       onChange={this.handleValueChange.bind(this)}
+                       onKeyDown={this.handleKeyDown.bind(this)}/>
             </div>
+        )
+    }
+
+    renderSaveButton() {
+        return (
+            <Button bsStyle="success" bsSize="xsmall" className="save" onClick={this.handleSaveChange.bind(this)}>
+                <Glyphicon glyph="ok"/>
+            </Button>
         )
     }
 
@@ -67,12 +75,27 @@ class EditableText extends React.Component<IEditableTextProps, IEditableTextStat
         });
     }
 
+    handleKeyDown(ev:React.KeyboardEvent) {
+        if (ev.keyCode == 13) { // handle Enter
+            this.handleSaveChange();
+        } else if (ev.keyCode == 27) { // handle Escape
+            this.handleCancel();
+        }
+    }
+
     handleSaveChange() {
         if (typeof this.props.onChange == "function") {
             this.props.onChange(this.state.value);
         }
 
         this.setState({
+            showEdit: false
+        });
+    }
+
+    handleCancel() {
+        this.setState({
+            value: this.props.value,
             showEdit: false
         });
     }
