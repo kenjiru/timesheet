@@ -2,14 +2,15 @@ import * as React from "react";
 import * as ReactDOM from "react-dom";
 import moment from "moment";
 import "moment-duration-format";
-import { Grid, Row, Col, Panel, Collapse, ListGroup, ListGroupItem, Glyphicon, Button } from "react-bootstrap";
+import { Grid, Row, Col, Collapse, Button } from "react-bootstrap";
 
-import store from "../../model/store";
-import { updateTask } from "../../model/actions";
 import Callout from "../../widgets/callout/Callout";
 import EditableText from "../../widgets/editable-text/EditableText";
-import { ITask, IProject, ITag, ITaskTag, IBreak } from "../../model/store";
+import store, { ITask, IProject, ITag, ITaskTag, IBreak } from "../../model/store";
+import { updateTask } from "../../model/actions";
 import DateUtil, { ITimeInterval } from "../../utils/DateUtil";
+
+import TaskBreaks from "./TaskBreaks";
 
 import "./TaskItem.less";
 
@@ -67,39 +68,12 @@ class TaskItem extends React.Component<ITaskItemProps, ITaskItemState> {
     }
 
     renderBreaks() {
-        let breakElements = _.map(this.props.breaks, (breakItem:IBreak, index:number) => {
-            return this.renderBreak(breakItem, index);
-        });
-
         return (
             <Collapse in={this.state.showBreaks}>
                 <div>
-                    <ListGroup className="task-breaks">
-                        {breakElements}
-                    </ListGroup>
+                    <TaskBreaks breaks={this.props.breaks}/>
                 </div>
             </Collapse>
-        )
-    }
-
-    renderBreak(breakItem:IBreak, index:number) {
-        let bsStyle = index%2 == 1 ? "warning" : null;
-        let breakDuration = DateUtil.computeDuration(breakItem);
-
-        return (
-            <ListGroupItem key={index} bsStyle={bsStyle}>
-                <Row>
-                    <Col md={2}>
-                        <div>{DateUtil.extractTime(breakItem.startDate)} - {DateUtil.extractTime(breakItem.endDate)}</div>
-                    </Col>
-                    <Col md={8}>
-                        <div>breakDescription</div>
-                    </Col>
-                    <Col md={2} className="text-right">
-                        <div>{DateUtil.formatDuration(breakDuration)}</div>
-                    </Col>
-                </Row>
-            </ListGroupItem>
         )
     }
 

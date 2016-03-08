@@ -4,9 +4,9 @@ import "moment-duration-format";
 import { Grid, Row, Col, Panel, Collapse, ListGroup, ListGroupItem, Glyphicon, Button } from "react-bootstrap";
 
 import Callout from "../../widgets/callout/Callout";
+import TaskItem from "./../task-item/TaskItem";
 import { ITask, IProject, ITag, ITaskTag, IBreak } from "../../model/store";
 import DateUtil from "../../utils/DateUtil";
-import TaskItem from "./TaskItem";
 
 class WorkingDay extends React.Component<IWorkingDayProps, IWorkingDayState> {
     render() {
