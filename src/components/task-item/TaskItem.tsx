@@ -6,9 +6,11 @@ import { Grid, Row, Col, Collapse, Button } from "react-bootstrap";
 
 import Callout from "../../widgets/callout/Callout";
 import EditableText from "../../widgets/editable-text/EditableText";
+import EditableSelect from "../../widgets/editable-select/EditableSelect";
 import store, { ITask, IProject, ITag, ITaskTag, IBreak } from "../../model/store";
 import { updateTask } from "../../model/actions";
 import DateUtil, { ITimeInterval } from "../../utils/DateUtil";
+import { IEntry } from "../../utils/CommonInterfaces";
 
 import TaskBreaks from "./TaskBreaks";
 
@@ -33,27 +35,22 @@ class TaskItem extends React.Component<ITaskItemProps, ITaskItemState> {
         let breakDuration = this.computeBreakDuration();
 
         let tagsString = this.computeTaskTags(task.taskId);
-        let projectName = this.computeProjectName(task.projectId);
-
         let taskInterval = DateUtil.extractTime(task.startDate) + " - " + DateUtil.extractTime(task.endDate);
 
         return (
             <Callout key={task.taskId} bsStyle={bsStyle} className="task-item">
                 <Row>
                     <Col md={2}>
-                        <div>
-                            <EditableText value={taskInterval} onChange={this.handleTaskIntervalChange.bind(this)}/>
-                        </div>
+                        <EditableText value={taskInterval} onChange={this.handleTaskIntervalChange.bind(this)}/>
                         <div>
                             <Button className="show-hide-button" bsSize="xsmall"
                                     onClick={this.handleShowBreaks.bind(this)}>{buttonText}</Button>
                         </div>
                     </Col>
                     <Col md={7}>
-                        <div>{projectName}</div>
-                        <div>
-                            <EditableText value={task.description} onChange={this.handleDescriptionChange.bind(this)}/>
-                        </div>
+                        <EditableSelect selectedValue={task.projectId} availableValues={this.computeProjectValues()}
+                                        onChange={this.handleProjectChange.bind(this)} iconId="folder-open"/>
+                        <EditableText value={task.description} onChange={this.handleDescriptionChange.bind(this)}/>
                     </Col>
                     <Col md={1}>
                         <div>{tagsString}</div>
@@ -102,8 +99,22 @@ class TaskItem extends React.Component<ITaskItemProps, ITaskItemState> {
         this.updateStore(task);
     }
 
+    handleProjectChange(newProjectId:string) {
+        let task:ITask = _.clone(this.props.task);
+        task.projectId = newProjectId;
+
+        this.updateStore(task);
+    }
+
     updateStore(newTask:ITask) {
         store.dispatch(updateTask(newTask));
+    }
+
+    computeProjectValues():IEntry[] {
+        return _.map(this.props.projects, (project:IProject) => ({
+            id: project.projectId,
+            label: project.name
+        }));
     }
 
     computeTaskTags(taskId:string):string {
