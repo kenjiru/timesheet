@@ -51,7 +51,9 @@ class TaskItem extends React.Component<ITaskItemProps, ITaskItemState> {
                     </Col>
                     <Col md={7}>
                         <div>{projectName}</div>
-                        <div>{task.description}</div>
+                        <div>
+                            <EditableText value={task.description} onChange={this.handleDescriptionChange.bind(this)}/>
+                        </div>
                     </Col>
                     <Col md={1}>
                         <div>{tagsString}</div>
@@ -90,7 +92,18 @@ class TaskItem extends React.Component<ITaskItemProps, ITaskItemState> {
         task.startDate = DateUtil.extractDate(task.startDate) + " " + taskInterval.startTime;
         task.endDate = DateUtil.extractDate(task.endDate) + " " + taskInterval.endTime;
 
-        store.dispatch(updateTask(task));
+        this.updateStore(task);
+    }
+
+    handleDescriptionChange(newDescription: string) {
+        let task:ITask = _.clone(this.props.task);
+        task.description = newDescription;
+
+        this.updateStore(task);
+    }
+
+    updateStore(newTask:ITask) {
+        store.dispatch(updateTask(newTask));
     }
 
     computeTaskTags(taskId:string):string {
