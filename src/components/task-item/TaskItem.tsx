@@ -40,22 +40,22 @@ class TaskItem extends React.Component<ITaskItemProps, ITaskItemState> {
         return (
             <Callout key={task.taskId} bsStyle={bsStyle} className="task-item">
                 <Row>
-                    <Col md={2}>
+                    <Col xs={3} md={2}>
                         <EditableText value={taskInterval} onChange={this.handleTaskIntervalChange.bind(this)}/>
                         <div>
                             <Button className="show-hide-button" bsSize="xsmall"
                                     onClick={this.handleShowBreaks.bind(this)}>{buttonText}</Button>
                         </div>
                     </Col>
-                    <Col md={7}>
+                    <Col xs={6} md={7}>
                         <EditableSelect selectedValue={task.projectId} availableValues={this.computeProjectValues()}
                                         onChange={this.handleProjectChange.bind(this)} iconId="folder-open"/>
                         <EditableText value={task.description} onChange={this.handleDescriptionChange.bind(this)}/>
                     </Col>
-                    <Col md={1}>
+                    <Col xs={1} md={1}>
                         <div>{tagsString}</div>
                     </Col>
-                    <Col md={2} className="text-right">
+                    <Col xs={2} md={2} className="text-right">
                         <div>{DateUtil.formatDuration(workDuration)}</div>
                         <div>{DateUtil.formatDuration(breakDuration)}</div>
                     </Col>

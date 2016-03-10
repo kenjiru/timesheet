@@ -32,9 +32,9 @@ class WorkingDay extends React.Component<IWorkingDayProps, IWorkingDayState> {
 
         return (
             <Row>
-                <Col md={9}>{date}</Col>
-                <Col md={1}>Tags</Col>
-                <Col md={2} className="text-right">
+                <Col xs={4} md={9}>{date}</Col>
+                <Col xs={4} md={1}>Tags</Col>
+                <Col xs={4} md={2} className="text-right">
                     <div>{DateUtil.formatDuration(workDuration)}</div>
                     <div>{DateUtil.formatDuration(breakDuration)}</div>
                 </Col>

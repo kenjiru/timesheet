@@ -29,14 +29,14 @@ class CreateTask extends React.Component<ICreateTaskProps, ICreateTaskState> {
         return (
             <Grid className="create-task" fluid={true}>
                 <Row>
-                    <Col md={2}>
+                    <Col xs={6} md={2}>
                         <DatePicker onChange={this.handleStartDateChanged.bind(this)}>
                             <Input type="text" label="Start date" placeholder="Start date" help="Format: 18/02/2016"
                                    value={this.state.startDate} readOnly addonBefore={<Glyphicon glyph="calendar"/>}/>
                         </DatePicker>
                     </Col>
 
-                    <Col md={2}>
+                    <Col xs={6} md={2}>
                         <Input type="select" label="Project" placeholder="select" value={this.state.projectId}
                                onChange={this.handleProjectChanged.bind(this)}
                                addonBefore={<Glyphicon glyph="folder-open"/>}>
@@ -70,7 +70,7 @@ class CreateTask extends React.Component<ICreateTaskProps, ICreateTaskState> {
 
                     <Col md={1} className="text-left">
                         <label className="control-label">&nbsp;</label>
-                        <div>
+                        <div className="form-group">
                             <Button bsStyle="primary" onClick={this.handleAddClicked.bind(this)}>Add Task</Button>
                         </div>
                     </Col>

@@ -36,15 +36,15 @@ class TaskBreaks extends React.Component<ITaskBreaksProps, ITaskBreaksState> {
         return (
             <ListGroupItem key={index} bsStyle={bsStyle}>
                 <Row>
-                    <Col md={2}>
+                    <Col xs={3} md={2}>
                         <EditableText value={breakInterval}
                                       onChange={this.handleBreakIntervalChange.bind(this, breakItem.breakId)}/>
                     </Col>
-                    <Col md={8}>
+                    <Col xs={6} md={8}>
                         <EditableText value={breakItem.description}
                                       onChange={this.handleDescriptionChange.bind(this, breakItem.breakId)}/>
                     </Col>
-                    <Col md={2} className="text-right">
+                    <Col xs={3} md={2} className="text-right">
                         <div>{DateUtil.formatDuration(breakDuration)}</div>
                     </Col>
                 </Row>

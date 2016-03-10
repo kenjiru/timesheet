@@ -26,11 +26,11 @@ class App extends React.Component<IAppProps, IAppState> {
                 <div className="app">
                     <Grid className="app" fluid={true}>
                         <Row>
-                            <Col md={10}>
+                            <Col xs={6}>
                                 <h1>Timesheet</h1>
                             </Col>
 
-                            <Col md={2} className="text-right">
+                            <Col xs={6} className="text-right">
                                 <h1> </h1>
                                 <ButtonGroup>
                                     <Button onClick={this.saveStore.bind(this)}>Save Store</Button>
