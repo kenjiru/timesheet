@@ -40,12 +40,17 @@ class EditableSelect extends React.Component<IEditableSelectProps, IEditableSele
     }
 
     renderText() {
-        let selectedEntry:IEntry = _.find(this.props.availableValues, (entry:IEntry) => entry.id == this.props.selectedValue);
+        let selectedEntry:IEntry = _.find(this.props.availableValues, (entry:IEntry) => (
+            entry.id == this.props.selectedValue
+        ));
+
+        let text:string = "";
+        if (selectedEntry) {
+            text = selectedEntry.label;
+        }
 
         return (
-            <div className="text-container" onClick={this.handleClick.bind(this)}>
-                {selectedEntry.label}
-            </div>
+            <div className="text-container" onClick={this.handleClick.bind(this)}>{text}</div>
         )
     }
 

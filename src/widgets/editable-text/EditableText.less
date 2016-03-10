@@ -1,7 +1,11 @@
 .editable-text {
 	.text-container {
 		padding: 5px 10px;
-		margin-bottom: 15px;
+
+		&:after {
+			content: " ";
+			display: inline-block;
+		}
 
 		&:hover {
 			background-color: rgba(204, 204, 204, 0.5);
