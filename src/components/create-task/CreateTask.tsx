@@ -1,6 +1,7 @@
 import * as React from 'react';
 import moment from "moment";
 import { Grid, Row, Col, Panel, Button, Input, ButtonInput, Glyphicon } from "react-bootstrap";
+import Select from "react-select";
 
 import TagsManager from "../tags-manager/TagsManager";
 import DatePicker from "../../widgets/date-picker/DatePicker";
@@ -45,7 +46,7 @@ class CreateTask extends React.Component<ICreateTaskProps, ICreateTaskState> {
                         </Input>
                     </Col>
 
-                    <Col md={3}>
+                    <Col md={2}>
                         <Input type="text" label="Working intervals" placeholder="Enter text here"
                                help="Example 08:30-12:30, 14:00-18:00" addonBefore={<Glyphicon glyph="time"/>}
                                hasFeedback value={this.state.workingInterval}
@@ -58,17 +59,17 @@ class CreateTask extends React.Component<ICreateTaskProps, ICreateTaskState> {
                                onChange={this.handleTaskDescriptionChange.bind(this)}/>
                     </Col>
 
-                    <Col md={1}>
-                        <Input type="select" label="Tags" placeholder="select"
-                               value={this.state.tagId} addonBefore={<Glyphicon glyph="tags"/>}
-                               onChange={this.handleTagsChange.bind(this)}>
-                            <option value="none">none</option>
-                            {this.renderTags()}
-                        </Input>
+                    <Col md={2}>
+                        <div className="form-group">
+                            <label className="control-label">Tags</label>
+                            <Select name="tags-select" value={this.state.tagId} options={this.computeTagOptions()}
+                                    onChange={this.handleTagsChange.bind(this)} multi={true}/>
+                        </div>
+
                         <ButtonInput onClick={this.showManageTags.bind(this)}>Manage Tags</ButtonInput>
                     </Col>
 
-                    <Col md={1} className="text-left">
+                    <Col md={1} className="text-right">
                         <label className="control-label">&nbsp;</label>
                         <div className="form-group">
                             <Button bsStyle="primary" onClick={this.handleAddClicked.bind(this)}>Add Task</Button>
@@ -91,12 +92,6 @@ class CreateTask extends React.Component<ICreateTaskProps, ICreateTaskState> {
     renderProjects() {
         return _.map(this.props.projects, (project:IProject) => (
             <option key={project.projectId} value={project.projectId}>{project.name}</option>
-        ));
-    }
-
-    renderTags() {
-        return _.map(this.props.tags, (tag:ITag) => (
-            <option key={tag.tagId} value={tag.tagId}>{tag.name}</option>
         ));
     }
 
@@ -138,16 +133,24 @@ class CreateTask extends React.Component<ICreateTaskProps, ICreateTaskState> {
         });
     }
 
-    handleTagsChange(ev) {
+    handleTagsChange(selectedValues:IOption[]) {
+        let value:string = _.map(selectedValues, (selectedValue:IOption) => selectedValue.value).join(",");
+
         this.setState({
-            tagId: ev.target.value
+            tagId: value
         });
     }
 
     handleAddClicked() {
+        let taskId = this.createTask();
+        this.createBreaks(taskId);
+        this.createTaskTags(taskId);
+    }
+
+    createTask() {
         let state = this.state;
-        let taskInterval = this.computeTaskInterval();
         let taskId = IdUtil.newId();
+        let taskInterval = this.computeTaskInterval();
 
         let task:ITask = {
             taskId,
@@ -157,17 +160,34 @@ class CreateTask extends React.Component<ICreateTaskProps, ICreateTaskState> {
             description: state.description
         };
 
-        let taskTag:ITaskTag = {
-            id: IdUtil.newId(),
-            taskId: taskId,
-            tagId: state.tagId
-        };
-
-        let breaks:IBreak[] = this.computeBreaks(task.taskId);
-        _.each(breaks, (breakItem:IBreak) => this.props.dispatch(addBreak(breakItem)));
-
-        this.props.dispatch(addTaskTag(taskTag));
         this.props.dispatch(addTask(task));
+
+        return taskId;
+    }
+
+    createBreaks(taskId:string) {
+        let breaks:IBreak[] = this.computeBreaks(taskId);
+        _.each(breaks, (breakItem:IBreak) => this.props.dispatch(addBreak(breakItem)));
+    }
+
+    createTaskTags(taskId:string) {
+        let tagIds = this.state.tagId.split(",");
+
+        _.each(tagIds, tagId => {
+            let taskTag:ITaskTag = {
+                id: IdUtil.newId(),
+                taskId,
+                tagId
+            };
+            this.props.dispatch(addTaskTag(taskTag));
+        });
+    }
+
+    computeTagOptions() {
+        return _.map(this.props.tags, (tag:ITag) => ({
+            value: tag.tagId,
+            label: tag.name
+        }));
     }
 
     computeBreaks(taskId):IBreak[] {
@@ -203,6 +223,11 @@ class CreateTask extends React.Component<ICreateTaskProps, ICreateTaskState> {
 
         return _.map(workingIntervals, (interval:string) => DateUtil.computeTimeInterval(interval));
     }
+}
+
+interface IOption {
+    value: string|number,
+    label: string
 }
 
 interface ICreateTaskProps {

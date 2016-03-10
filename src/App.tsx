@@ -12,6 +12,7 @@ import CreateTask from "./components/create-task/CreateTask";
 
 import "bootstrap";
 import "bootstrap/dist/css/bootstrap.css";
+import "react-select/dist/react-select.css";
 
 import './App.less';
 
