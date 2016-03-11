@@ -11,6 +11,9 @@ import DateUtil, { IDateInterval, ITimeInterval } from "../../utils/DateUtil";
 import { ITask, IProject, ITag, ITaskTag, IBreak } from "../../model/store";
 import { IAction, addTask, addTaskTag, addBreak } from "../../model/actions";
 import IdUtil from "../../utils/IdUtil";
+import { IOption } from "../../utils/CommonInterfaces";
+
+import "./CreateTask.less";
 
 class CreateTask extends React.Component<ICreateTaskProps, ICreateTaskState> {
     constructor(props:ICreateTaskProps) {
@@ -62,8 +65,14 @@ class CreateTask extends React.Component<ICreateTaskProps, ICreateTaskState> {
                     <Col md={2}>
                         <div className="form-group">
                             <label className="control-label">Tags</label>
-                            <Select name="tags-select" value={this.state.tagId} options={this.computeTagOptions()}
-                                    onChange={this.handleTagsChange.bind(this)} multi={true}/>
+                            <div className="tags-container input-group">
+                                <span className="input-group-addon">
+                                    <Glyphicon glyph="tags"/>
+                                </span>
+
+                                <Select name="tags-select" value={this.state.tagId} options={this.computeTagOptions()}
+                                        onChange={this.handleTagsChange.bind(this)} multi={true}/>
+                            </div>
                         </div>
 
                         <ButtonInput onClick={this.showManageTags.bind(this)}>Manage Tags</ButtonInput>
@@ -223,11 +232,6 @@ class CreateTask extends React.Component<ICreateTaskProps, ICreateTaskState> {
 
         return _.map(workingIntervals, (interval:string) => DateUtil.computeTimeInterval(interval));
     }
-}
-
-interface IOption {
-    value: string|number,
-    label: string
 }
 
 interface ICreateTaskProps {
