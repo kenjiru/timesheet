@@ -31,6 +31,14 @@ export function addTaskTag(taskTag:ITaskTag): IAction {
     }
 }
 
+export const REMOVE_TASK_TAG = "REMOVE_TASK_TAG";
+export function removeTaskTag(taskTag:ITaskTag): IAction {
+    return {
+        type: REMOVE_TASK_TAG,
+        payload: taskTag
+    }
+}
+
 export const ADD_BREAK = "ADD_BREAK";
 export function addBreak(breakItem:IBreak): IAction {
     return {
