@@ -7,14 +7,17 @@ import { Grid, Row, Col, Collapse, Button } from "react-bootstrap";
 import Callout from "../../widgets/callout/Callout";
 import EditableText from "../../widgets/editable-text/EditableText";
 import EditableSelect from "../../widgets/editable-select/EditableSelect";
+import EditableMultiSelect from "../../widgets/editable-multi-select/EditableMultiSelect";
 import store, { ITask, IProject, ITag, ITaskTag, IBreak } from "../../model/store";
-import { updateTask } from "../../model/actions";
+import { updateTask, addTaskTag, removeTaskTag } from "../../model/actions";
 import DateUtil, { ITimeInterval } from "../../utils/DateUtil";
-import { IEntry } from "../../utils/CommonInterfaces";
+import IdUtil from "../../utils/IdUtil";
+import { IEntry, IOption } from "../../utils/CommonInterfaces";
 
 import TaskBreaks from "./TaskBreaks";
 
 import "./TaskItem.less";
+import {removeTag} from "../../model/actions";
 
 class TaskItem extends React.Component<ITaskItemProps, ITaskItemState> {
     constructor(props:ITaskItemProps) {
@@ -34,7 +37,14 @@ class TaskItem extends React.Component<ITaskItemProps, ITaskItemState> {
         let workDuration = this.computeWorkDuration();
         let breakDuration = this.computeBreakDuration();
 
-        let tagsString = this.computeTaskTags(task.taskId);
+        let availableTags:IEntry[] = _.map(this.props.tags, (tag:ITag) => ({
+            id: tag.tagId,
+            label: tag.name
+        }));
+
+        let selectedTags:IEntry[] = this.computeTaskTags();
+        let selectedValue = _.map(selectedTags, tagOption => tagOption.id).join(",");
+
         let taskInterval = DateUtil.extractTime(task.startDate) + " - " + DateUtil.extractTime(task.endDate);
 
         return (
@@ -47,13 +57,14 @@ class TaskItem extends React.Component<ITaskItemProps, ITaskItemState> {
                                     onClick={this.handleShowBreaks.bind(this)}>{buttonText}</Button>
                         </div>
                     </Col>
-                    <Col xs={6} md={7}>
+                    <Col xs={5} md={6}>
                         <EditableSelect selectedValue={task.projectId} availableValues={this.computeProjectValues()}
                                         onChange={this.handleProjectChange.bind(this)} iconId="folder-open"/>
                         <EditableText value={task.description} onChange={this.handleDescriptionChange.bind(this)}/>
                     </Col>
-                    <Col xs={1} md={1}>
-                        <div>{tagsString}</div>
+                    <Col xs={2} md={2}>
+                        <EditableMultiSelect selectedValue={selectedValue} availableValues={availableTags}
+                                             onChange={this.handleTagsChange.bind(this)} iconId="tags"/>
                     </Col>
                     <Col xs={2} md={2} className="text-right">
                         <div>{DateUtil.formatDuration(workDuration)}</div>
@@ -106,6 +117,28 @@ class TaskItem extends React.Component<ITaskItemProps, ITaskItemState> {
         this.updateStore(task);
     }
 
+    handleTagsChange(value:string) {
+        let oldTags = this.computeTagIds();
+        let newTags = value.split(",");
+
+        let tagsToAdd = _.difference(newTags, oldTags);
+        let tagsToDelete = _.difference(oldTags, newTags);
+
+        let taskId = this.props.task.taskId;
+
+        _.each(tagsToDelete, tagId => store.dispatch(removeTaskTag({
+            id: "not-needed",
+            taskId,
+            tagId
+        })));
+
+        _.each(tagsToAdd, tagId => store.dispatch(addTaskTag({
+            id: IdUtil.newId(),
+            taskId,
+            tagId
+        })));
+    }
+
     updateStore(newTask:ITask) {
         store.dispatch(updateTask(newTask));
     }
@@ -117,14 +150,23 @@ class TaskItem extends React.Component<ITaskItemProps, ITaskItemState> {
         }));
     }
 
-    computeTaskTags(taskId:string):string {
-        let taskTags = _.filter(this.props.taskTags, {taskId: taskId});
-        let tagIds = _.map(taskTags, (taskTag:ITaskTag) => taskTag.tagId);
+    computeTaskTags():IEntry[] {
+        let tagIds = this.computeTagIds();
         let tags = _.filter(this.props.tags, (tag:ITag) => {
             return _.indexOf(tagIds, tag.tagId) != -1;
         });
 
-        return _.map(tags, (tag:ITag) => tag.name).join(",");
+        return _.map(tags, (tag:ITag) => ({
+            id: tag.tagId,
+            label: tag.name
+        }));
+    }
+
+    computeTagIds():string[] {
+        let taskId = this.props.task.taskId;
+        let taskTags = _.filter(this.props.taskTags, {taskId: taskId});
+
+        return _.map(taskTags, (taskTag:ITaskTag) => taskTag.tagId);
     }
 
     computeProjectName(projectId:string):string {
