@@ -29,6 +29,12 @@ var config = {
 		extensions: ['', '.ts', '.tsx', '.js']
 	},
 	module: {
+		preLoaders: [
+			{
+				test:  /\.(tsx|ts)/,
+				loader: "tslint"
+			}
+		],
 		loaders: [
 			{
 				test: /\.js$/,
