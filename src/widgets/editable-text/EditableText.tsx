@@ -1,10 +1,10 @@
 import * as React from "react";
-import { Row, Col, Input, Button, ButtonInput, Glyphicon } from "react-bootstrap";
+import { Input, Button, Glyphicon } from "react-bootstrap";
 
 import "./EditableText.less";
 
 class EditableText extends React.Component<IEditableTextProps, IEditableTextState> {
-    constructor(props:IEditableTextProps) {
+    constructor(props: IEditableTextProps) {
         super(props);
 
         this.state = {
@@ -13,23 +13,25 @@ class EditableText extends React.Component<IEditableTextProps, IEditableTextStat
         };
     }
 
-    componentDidUpdate() {
+    /* tslint:disable:no-string-literal */
+    public componentDidUpdate(): void {
         if (this.state.showEdit) {
-            let inputComponent:any = this.refs["editInput"];
+            let inputComponent: any = this.refs["editInput"];
 
             inputComponent.refs["input"].focus();
         }
     }
+    /* tslint:enable:no-string-literal */
 
-    render() {
+    public render(): React.ReactElement<any> {
         return (
             <div className="editable-text">
                 {this.renderContent()}
             </div>
-        )
+        );
     }
 
-    renderContent() {
+    private renderContent(): React.ReactElement<any> {
         if (this.state.showEdit) {
             return this.renderEdit();
         } else {
@@ -37,54 +39,54 @@ class EditableText extends React.Component<IEditableTextProps, IEditableTextStat
         }
     }
 
-    renderText() {
+    private renderText(): React.ReactElement<any> {
         return (
             <div className="text-container" onClick={this.handleClick.bind(this)}>
                 {this.props.value}
             </div>
-        )
+        );
     }
 
-    renderEdit() {
+    private renderEdit(): React.ReactElement<any> {
         return (
             <div className="input-container">
                 <Input ref="editInput" type="text" value={this.state.value} addonAfter={this.renderSaveButton()}
                        onChange={this.handleValueChange.bind(this)}
                        onKeyDown={this.handleKeyDown.bind(this)}/>
             </div>
-        )
+        );
     }
 
-    renderSaveButton() {
+    private renderSaveButton(): React.ReactElement<any> {
         return (
             <Button bsStyle="success" bsSize="xsmall" className="save" onClick={this.handleSaveChange.bind(this)}>
                 <Glyphicon glyph="ok"/>
             </Button>
-        )
+        );
     }
 
-    handleClick() {
+    private handleClick(): void {
         this.setState({
             showEdit: true
         });
     }
 
-    handleValueChange(ev) {
+    private handleValueChange(ev: any): void {
         this.setState({
             value: ev.target.value
         });
     }
 
-    handleKeyDown(ev:React.KeyboardEvent) {
-        if (ev.keyCode == 13) { // handle Enter
+    private handleKeyDown(ev: React.KeyboardEvent): void {
+        if (ev.keyCode === 13) { // handle Enter
             this.handleSaveChange();
-        } else if (ev.keyCode == 27) { // handle Escape
+        } else if (ev.keyCode === 27) { // handle Escape
             this.handleCancel();
         }
     }
 
-    handleSaveChange() {
-        if (typeof this.props.onChange == "function") {
+    private handleSaveChange(): void {
+        if (typeof this.props.onChange === "function") {
             this.props.onChange(this.state.value);
         }
 
@@ -93,7 +95,7 @@ class EditableText extends React.Component<IEditableTextProps, IEditableTextStat
         });
     }
 
-    handleCancel() {
+    private handleCancel(): void {
         this.setState({
             value: this.props.value,
             showEdit: false
@@ -102,13 +104,13 @@ class EditableText extends React.Component<IEditableTextProps, IEditableTextStat
 }
 
 interface IEditableTextProps extends React.Props<EditableText> {
-    value: string,
-    onChange: (value:string) => void
+    value: string;
+    onChange: (value: string) => void;
 }
 
 interface IEditableTextState {
-    showEdit?: boolean,
-    value?: string
+    showEdit?: boolean;
+    value?: string;
 }
 
 export default EditableText;

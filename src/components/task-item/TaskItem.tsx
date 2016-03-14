@@ -1,8 +1,7 @@
 import * as React from "react";
-import * as ReactDOM from "react-dom";
 import moment from "moment";
 import "moment-duration-format";
-import { Grid, Row, Col, Collapse, Button } from "react-bootstrap";
+import { Row, Col, Collapse, Button } from "react-bootstrap";
 
 import Callout from "../../widgets/callout/Callout";
 import EditableText from "../../widgets/editable-text/EditableText";
@@ -12,15 +11,14 @@ import store, { ITask, IProject, ITag, ITaskTag, IBreak } from "../../model/stor
 import { updateTask, addTaskTag, removeTaskTag } from "../../model/actions";
 import DateUtil, { ITimeInterval } from "../../utils/DateUtil";
 import IdUtil from "../../utils/IdUtil";
-import { IEntry, IOption } from "../../utils/CommonInterfaces";
+import { IEntry } from "../../utils/CommonInterfaces";
 
 import TaskBreaks from "./TaskBreaks";
 
 import "./TaskItem.less";
-import {removeTag} from "../../model/actions";
 
 class TaskItem extends React.Component<ITaskItemProps, ITaskItemState> {
-    constructor(props:ITaskItemProps) {
+    constructor(props: ITaskItemProps) {
         super(props);
 
         this.state = {
@@ -28,24 +26,24 @@ class TaskItem extends React.Component<ITaskItemProps, ITaskItemState> {
         };
     }
 
-    render() {
-        let task:ITask = this.props.task;
+    public render(): React.ReactElement<any> {
+        let task: ITask = this.props.task;
 
-        let bsStyle = this.props.isOdd ? "warning" : null;
-        let buttonText = this.state.showBreaks ? "Hide Breaks" : "Show Breaks";
+        let bsStyle: string = this.props.isOdd ? "warning" : null;
+        let buttonText: string = this.state.showBreaks ? "Hide Breaks" : "Show Breaks";
 
-        let workDuration = this.computeWorkDuration();
-        let breakDuration = this.computeBreakDuration();
+        let workDuration: moment.Duration = this.computeWorkDuration();
+        let breakDuration: moment.Duration = this.computeBreakDuration();
 
-        let availableTags:IEntry[] = _.map(this.props.tags, (tag:ITag) => ({
+        let availableTags: IEntry[] = _.map(this.props.tags, (tag: ITag) => ({
             id: tag.tagId,
             label: tag.name
         }));
 
-        let selectedTags:IEntry[] = this.computeTaskTags();
-        let selectedValue = _.map(selectedTags, tagOption => tagOption.id).join(",");
+        let selectedTags: IEntry[] = this.computeTaskTags();
+        let selectedValue: string = _.map(selectedTags, (tagOption: IEntry) => tagOption.id).join(",");
 
-        let taskInterval = DateUtil.extractTime(task.startDate) + " - " + DateUtil.extractTime(task.endDate);
+        let taskInterval: string = DateUtil.extractTime(task.startDate) + " - " + DateUtil.extractTime(task.endDate);
 
         return (
             <Callout key={task.taskId} bsStyle={bsStyle} className="task-item">
@@ -74,28 +72,28 @@ class TaskItem extends React.Component<ITaskItemProps, ITaskItemState> {
 
                 {this.renderBreaks()}
             </Callout>
-        )
+        );
     }
 
-    renderBreaks() {
+    private renderBreaks(): React.ReactElement<any> {
         return (
             <Collapse in={this.state.showBreaks}>
                 <div>
                     <TaskBreaks breaks={this.props.breaks}/>
                 </div>
             </Collapse>
-        )
+        );
     }
 
-    handleShowBreaks() {
+    private handleShowBreaks(): void {
         this.setState({
             showBreaks: !this.state.showBreaks
         });
     }
 
-    handleTaskIntervalChange(intervalStr: string) {
-        let task:ITask = _.clone(this.props.task);
-        let taskInterval:ITimeInterval = DateUtil.computeTimeInterval(intervalStr);
+    private handleTaskIntervalChange(intervalStr: string): void {
+        let task: ITask = _.clone(this.props.task);
+        let taskInterval: ITimeInterval = DateUtil.computeTimeInterval(intervalStr);
 
         task.startDate = DateUtil.extractDate(task.startDate) + " " + taskInterval.startTime;
         task.endDate = DateUtil.extractDate(task.endDate) + " " + taskInterval.endTime;
@@ -103,103 +101,95 @@ class TaskItem extends React.Component<ITaskItemProps, ITaskItemState> {
         this.updateStore(task);
     }
 
-    handleDescriptionChange(newDescription: string) {
-        let task:ITask = _.clone(this.props.task);
+    private handleDescriptionChange(newDescription: string): void {
+        let task: ITask = _.clone(this.props.task);
         task.description = newDescription;
 
         this.updateStore(task);
     }
 
-    handleProjectChange(newProjectId:string) {
-        let task:ITask = _.clone(this.props.task);
+    private handleProjectChange(newProjectId: string): void {
+        let task: ITask = _.clone(this.props.task);
         task.projectId = newProjectId;
 
         this.updateStore(task);
     }
 
-    handleTagsChange(value:string) {
-        let oldTags = this.computeTagIds();
-        let newTags = value.split(",");
+    private handleTagsChange(value: string): void {
+        let oldTags: string[] = this.computeTagIds();
+        let newTags: string[] = value.split(",");
 
-        let tagsToAdd = _.difference(newTags, oldTags);
-        let tagsToDelete = _.difference(oldTags, newTags);
+        let tagsToAdd: string[] = _.difference(newTags, oldTags);
+        let tagsToDelete: string[] = _.difference(oldTags, newTags);
 
-        let taskId = this.props.task.taskId;
+        let taskId: string = this.props.task.taskId;
 
-        _.each(tagsToDelete, tagId => store.dispatch(removeTaskTag({
+        _.each(tagsToDelete, (tagId: string) => store.dispatch(removeTaskTag({
             id: "not-needed",
             taskId,
             tagId
         })));
 
-        _.each(tagsToAdd, tagId => store.dispatch(addTaskTag({
+        _.each(tagsToAdd, (tagId: string) => store.dispatch(addTaskTag({
             id: IdUtil.newId(),
             taskId,
             tagId
         })));
     }
 
-    updateStore(newTask:ITask) {
+    private updateStore(newTask: ITask): void {
         store.dispatch(updateTask(newTask));
     }
 
-    computeProjectValues():IEntry[] {
-        return _.map(this.props.projects, (project:IProject) => ({
+    private computeProjectValues(): IEntry[] {
+        return _.map(this.props.projects, (project: IProject) => ({
             id: project.projectId,
             label: project.name
         }));
     }
 
-    computeTaskTags():IEntry[] {
-        let tagIds = this.computeTagIds();
-        let tags = _.filter(this.props.tags, (tag:ITag) => {
-            return _.indexOf(tagIds, tag.tagId) != -1;
+    private computeTaskTags(): IEntry[] {
+        let tagIds: string[] = this.computeTagIds();
+        let tags: ITag[] = _.filter(this.props.tags, (tag: ITag) => {
+            return _.indexOf(tagIds, tag.tagId) !== -1;
         });
 
-        return _.map(tags, (tag:ITag) => ({
+        return _.map(tags, (tag: ITag) => ({
             id: tag.tagId,
             label: tag.name
         }));
     }
 
-    computeTagIds():string[] {
-        let taskId = this.props.task.taskId;
-        let taskTags = _.filter(this.props.taskTags, {taskId: taskId});
+    private computeTagIds(): string[] {
+        let taskId: string = this.props.task.taskId;
+        let taskTags: ITaskTag[] = _.filter(this.props.taskTags, {taskId: taskId});
 
-        return _.map(taskTags, (taskTag:ITaskTag) => taskTag.tagId);
+        return _.map(taskTags, (taskTag: ITaskTag) => taskTag.tagId);
     }
 
-    computeProjectName(projectId:string):string {
-        let project:IProject = _.find(this.props.projects, {projectId});
-
-        if (project) {
-            return project.name;
-        }
-    }
-
-    computeWorkDuration():moment.Duration {
-        let task = this.props.task;
-        let workDuration = DateUtil.computeDuration(task);
-        let breakDuration = this.computeBreakDuration();
+    private computeWorkDuration(): moment.Duration {
+        let task: ITask = this.props.task;
+        let workDuration: moment.Duration = DateUtil.computeDuration(task);
+        let breakDuration: moment.Duration = this.computeBreakDuration();
 
         return workDuration.subtract(breakDuration);
     }
 
-    computeBreakDuration():moment.Duration {
+    private computeBreakDuration(): moment.Duration {
         return DateUtil.computeTotalDuration(this.props.breaks);
     }
 }
 
 interface ITaskItemProps extends React.Props<TaskItem> {
-    task: ITask,
-    projects: IProject[],
-    tags: ITag[],
-    taskTags: ITaskTag[],
-    breaks: IBreak[], // this refers only to the breaks for this task
-    isOdd: boolean
+    task: ITask;
+    projects: IProject[];
+    tags: ITag[];
+    taskTags: ITaskTag[];
+    breaks: IBreak[]; // this refers only to the breaks for this task
+    isOdd: boolean;
 }
 interface ITaskItemState {
-    showBreaks?: boolean
+    showBreaks?: boolean;
 }
 
 export default TaskItem;

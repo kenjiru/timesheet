@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Grid, Row, Col, ListGroup, ListGroupItem } from "react-bootstrap";
+import { Row, Col, ListGroup, ListGroupItem } from "react-bootstrap";
 
 import EditableText from "../../widgets/editable-text/EditableText";
 import store, { IBreak } from "../../model/store";
@@ -9,29 +9,30 @@ import DateUtil, { ITimeInterval } from "../../utils/DateUtil";
 import "./TaskBreaks.less";
 
 class TaskBreaks extends React.Component<ITaskBreaksProps, ITaskBreaksState> {
-    render() {
+    public render(): React.ReactElement<any> {
         return (
             <ListGroup className="task-breaks">
                 {this.renderBreaks()}
             </ListGroup>
-        )
+        );
     }
 
-    renderBreaks():React.ReactElement<any>|React.ReactElement<any>[] {
-        if (this.props.breaks.length == 0) {
-            return <ListGroupItem key="no-breaks" bsStyle="warning">No breaks for this task</ListGroupItem>
+    private renderBreaks(): React.ReactElement<any>|React.ReactElement<any>[] {
+        if (this.props.breaks.length === 0) {
+            return <ListGroupItem key="no-breaks" bsStyle="warning">No breaks for this task</ListGroupItem>;
         }
 
-        return _.map(this.props.breaks, (breakItem:IBreak, index:number) => {
+        return _.map(this.props.breaks, (breakItem: IBreak, index: number) => {
             return this.renderBreak(breakItem, index);
         });
     }
 
-    renderBreak(breakItem:IBreak, index:number) {
-        let bsStyle = index % 2 == 1 ? "warning" : null;
-        let breakDuration = DateUtil.computeDuration(breakItem);
+    private renderBreak(breakItem: IBreak, index: number): React.ReactElement<any> {
+        let bsStyle: string = index % 2 === 1 ? "warning" : null;
+        let breakDuration: moment.Duration = DateUtil.computeDuration(breakItem);
 
-        let breakInterval = DateUtil.extractTime(breakItem.startDate) + " - " + DateUtil.extractTime(breakItem.endDate);
+        let breakInterval: string = DateUtil.extractTime(breakItem.startDate) + " - " +
+                DateUtil.extractTime(breakItem.endDate);
 
         return (
             <ListGroupItem key={index} bsStyle={bsStyle}>
@@ -49,14 +50,14 @@ class TaskBreaks extends React.Component<ITaskBreaksProps, ITaskBreaksState> {
                     </Col>
                 </Row>
             </ListGroupItem>
-        )
+        );
     }
 
-    handleBreakIntervalChange(breakId:string, intervalStr:string) {
-        let breakItem:IBreak = _.find(this.props.breaks, breakItem => breakItem.breakId = breakId);
+    private handleBreakIntervalChange(breakId: string, intervalStr: string): void {
+        let breakItem: IBreak = _.find(this.props.breaks, (item: IBreak) => item.breakId = breakId);
         breakItem = _.cloneDeep(breakItem);
 
-        let breakInterval:ITimeInterval = DateUtil.computeTimeInterval(intervalStr);
+        let breakInterval: ITimeInterval = DateUtil.computeTimeInterval(intervalStr);
 
         breakItem.startDate = DateUtil.extractDate(breakItem.startDate) + " " + breakInterval.startTime;
         breakItem.endDate = DateUtil.extractDate(breakItem.endDate) + " " + breakInterval.endTime;
@@ -64,8 +65,8 @@ class TaskBreaks extends React.Component<ITaskBreaksProps, ITaskBreaksState> {
         this.updateStore(breakItem);
     }
 
-    handleDescriptionChange(breakId:string, newDescription:string) {
-        let breakItem:IBreak = _.find(this.props.breaks, breakItem => breakItem.breakId = breakId);
+    private handleDescriptionChange(breakId: string, newDescription: string): void {
+        let breakItem: IBreak = _.find(this.props.breaks, (item: IBreak) => item.breakId = breakId);
         breakItem = _.cloneDeep(breakItem);
 
         breakItem.description = newDescription;
@@ -73,16 +74,15 @@ class TaskBreaks extends React.Component<ITaskBreaksProps, ITaskBreaksState> {
         this.updateStore(breakItem);
     }
 
-    updateStore(newBreak:IBreak) {
+    private updateStore(newBreak: IBreak): void {
         store.dispatch(updateBreak(newBreak));
     }
 }
 
 interface ITaskBreaksProps extends React.Props<TaskBreaks> {
-    breaks: IBreak[]
+    breaks: IBreak[];
 }
 
-interface ITaskBreaksState {
-}
+interface ITaskBreaksState {}
 
 export default TaskBreaks;

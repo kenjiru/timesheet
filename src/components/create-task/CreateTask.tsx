@@ -1,11 +1,10 @@
-import * as React from 'react';
+import * as React from "react";
 import moment from "moment";
-import { Grid, Row, Col, Panel, Button, Input, ButtonInput, Glyphicon } from "react-bootstrap";
+import { Grid, Row, Col, Button, Input, ButtonInput, Glyphicon } from "react-bootstrap";
 import Select from "react-select";
 
 import TagsManager from "../tags-manager/TagsManager";
 import DatePicker from "../../widgets/date-picker/DatePicker";
-import Callout from "../../widgets/callout/Callout";
 
 import DateUtil, { IDateInterval, ITimeInterval } from "../../utils/DateUtil";
 import { ITask, IProject, ITag, ITaskTag, IBreak } from "../../model/store";
@@ -16,7 +15,7 @@ import { IOption } from "../../utils/CommonInterfaces";
 import "./CreateTask.less";
 
 class CreateTask extends React.Component<ICreateTaskProps, ICreateTaskState> {
-    constructor(props:ICreateTaskProps) {
+    constructor(props: ICreateTaskProps) {
         super(props);
 
         this.state = {
@@ -29,7 +28,7 @@ class CreateTask extends React.Component<ICreateTaskProps, ICreateTaskState> {
         };
     }
 
-    render() {
+    public render(): React.ReactElement<any> {
         return (
             <Grid className="create-task" fluid={true}>
                 <Row>
@@ -88,85 +87,84 @@ class CreateTask extends React.Component<ICreateTaskProps, ICreateTaskState> {
 
                 {this.renderManageTags()}
             </Grid>
-        )
+        );
     }
 
-    renderManageTags() {
+    private renderManageTags(): React.ReactElement<any> {
         if (this.state.showManageTags) {
             return <TagsManager tags={this.props.tags} onClose={this.hideManageTags.bind(this)}
-                                dispatch={this.props.dispatch}/>
+                                dispatch={this.props.dispatch}/>;
         }
     }
 
-    renderProjects() {
-        return _.map(this.props.projects, (project:IProject) => (
+    private renderProjects(): React.ReactElement<any>[] {
+        return _.map(this.props.projects, (project: IProject) => (
             <option key={project.projectId} value={project.projectId}>{project.name}</option>
         ));
     }
 
-    showManageTags() {
+    private showManageTags(): void {
         this.setState({
             showManageTags: true
         });
     }
 
-    hideManageTags() {
+    private hideManageTags(): void {
         this.setState({
             showManageTags: false
         });
     }
 
-    handleStartDateChanged(date:Date) {
-        let dateStr = moment(date).format("DD-MM-YYYY");
+    private handleStartDateChanged(date: Date): void {
+        let dateStr: string = moment(date).format("DD-MM-YYYY");
 
         this.setState({
             startDate: dateStr
         });
     }
 
-    handleProjectChanged(ev) {
+    private handleProjectChanged(ev: any): void {
         this.setState({
             projectId: ev.target.value
         });
     }
 
-    handleWorkingIntervalChange(ev) {
+    private handleWorkingIntervalChange(ev: any): void {
         this.setState({
             workingInterval: ev.target.value
         });
     }
 
-    handleTaskDescriptionChange(ev) {
+    private handleTaskDescriptionChange(ev: any): void {
         this.setState({
             description: ev.target.value
         });
     }
 
-    handleTagsChange(selectedValues:IOption[]) {
-        let value:string = _.map(selectedValues, (selectedValue:IOption) => selectedValue.value).join(",");
+    private handleTagsChange(selectedValues: IOption[]): void {
+        let value: string = _.map(selectedValues, (selectedValue: IOption) => selectedValue.value).join(",");
 
         this.setState({
             tagId: value
         });
     }
 
-    handleAddClicked() {
-        let taskId = this.createTask();
+    private handleAddClicked(): void {
+        let taskId: string = this.createTask();
         this.createBreaks(taskId);
         this.createTaskTags(taskId);
     }
 
-    createTask() {
-        let state = this.state;
-        let taskId = IdUtil.newId();
-        let taskInterval = this.computeTaskInterval();
+    private createTask(): string {
+        let taskId: string = IdUtil.newId();
+        let taskInterval: IDateInterval = this.computeTaskInterval();
 
-        let task:ITask = {
+        let task: ITask = {
             taskId,
-            projectId: state.projectId,
+            projectId: this.state.projectId,
             startDate: taskInterval.startDate,
             endDate: taskInterval.endDate,
-            description: state.description
+            description: this.state.description
         };
 
         this.props.dispatch(addTask(task));
@@ -174,16 +172,16 @@ class CreateTask extends React.Component<ICreateTaskProps, ICreateTaskState> {
         return taskId;
     }
 
-    createBreaks(taskId:string) {
-        let breaks:IBreak[] = this.computeBreaks(taskId);
-        _.each(breaks, (breakItem:IBreak) => this.props.dispatch(addBreak(breakItem)));
+    private createBreaks(taskId: string): void {
+        let breaks: IBreak[] = this.computeBreaks(taskId);
+        _.each(breaks, (breakItem: IBreak) => this.props.dispatch(addBreak(breakItem)));
     }
 
-    createTaskTags(taskId:string) {
-        let tagIds = this.state.tagId.split(",");
+    private createTaskTags(taskId: string): void {
+        let tagIds: string[] = this.state.tagId.split(",");
 
-        _.each(tagIds, tagId => {
-            let taskTag:ITaskTag = {
+        _.each(tagIds, (tagId: string) => {
+            let taskTag: ITaskTag = {
                 id: IdUtil.newId(),
                 taskId,
                 tagId
@@ -192,61 +190,61 @@ class CreateTask extends React.Component<ICreateTaskProps, ICreateTaskState> {
         });
     }
 
-    computeTagOptions() {
-        return _.map(this.props.tags, (tag:ITag) => ({
+    private computeTagOptions(): any[] {
+        return _.map(this.props.tags, (tag: ITag) => ({
             value: tag.tagId,
             label: tag.name
         }));
     }
 
-    computeBreaks(taskId):IBreak[] {
-        let breaks:IBreak[] = [];
+    private computeBreaks(taskId: string): IBreak[] {
+        let breaks: IBreak[] = [];
 
-        let workingPeriods = this.computeWorkingPeriods();
+        let workingPeriods: ITimeInterval[] = this.computeWorkingPeriods();
 
-        for (let i=0; i < workingPeriods.length - 1; i++) {
+        for (let i: number = 0; i < workingPeriods.length - 1; i++) {
             breaks.push({
                 breakId: IdUtil.newId(),
                 taskId,
                 startDate: this.state.startDate + " " + workingPeriods[i].endTime,
-                endDate: this.state.startDate + " " + workingPeriods[i+1].startTime
+                endDate: this.state.startDate + " " + workingPeriods[i + 1].startTime
             });
         }
 
         return breaks;
     }
 
-    computeTaskInterval():IDateInterval {
-        let workingPeriods = this.computeWorkingPeriods();
-        let startDate = this.state.startDate + " " + workingPeriods[0].startTime;
-        let endDate = this.state.startDate + " " + workingPeriods[workingPeriods.length - 1].endTime;
+    private computeTaskInterval(): IDateInterval {
+        let workingPeriods: ITimeInterval[] = this.computeWorkingPeriods();
+        let startDate: string = this.state.startDate + " " + workingPeriods[0].startTime;
+        let endDate: string = this.state.startDate + " " + workingPeriods[workingPeriods.length - 1].endTime;
 
         return {
             startDate,
             endDate
-        }
+        };
     }
 
-    computeWorkingPeriods():ITimeInterval[] {
-        let workingIntervals = this.state.workingInterval.split(",");
+    private computeWorkingPeriods(): ITimeInterval[] {
+        let workingIntervals: string[] = this.state.workingInterval.split(",");
 
-        return _.map(workingIntervals, (interval:string) => DateUtil.computeTimeInterval(interval));
+        return _.map(workingIntervals, (interval: string) => DateUtil.computeTimeInterval(interval));
     }
 }
 
 interface ICreateTaskProps {
-    projects: IProject[],
-    tags: ITag[],
-    dispatch: (action) => void
+    projects: IProject[];
+    tags: ITag[];
+    dispatch: (action: IAction) => void;
 }
 
 interface ICreateTaskState {
-    startDate?: string,
-    projectId?: string,
-    workingInterval?: string,
-    description?: string,
-    tagId?: string,
-    showManageTags?: boolean
+    startDate?: string;
+    projectId?: string;
+    workingInterval?: string;
+    description?: string;
+    tagId?: string;
+    showManageTags?: boolean;
 }
 
 export default CreateTask;

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Grid, Row, Col, Modal, Panel, Button, Input, ListGroup, ListGroupItem, Glyphicon } from "react-bootstrap";
+import { Row, Col, Modal, Button, Input, ListGroup, ListGroupItem, Glyphicon } from "react-bootstrap";
 
 import IdUtil from "../../utils/IdUtil";
 import { ITag } from "../../model/store";
@@ -8,17 +8,17 @@ import { IAction, addTag, removeTag, updateTag } from "../../model/actions";
 import "./TagsManager.less";
 
 class TagsManager extends React.Component<ITagsManagerProps, ITagsManagerState> {
-    constructor(props:ITagsManagerProps) {
+    constructor(props: ITagsManagerProps) {
         super(props);
 
         this.state = {
             showCreateTag: false,
             tagName: null,
             editTagId: null
-        }
+        };
     }
 
-    render() {
+    public render(): React.ReactElement<any> {
         return (
             <Modal show={true} onHide={this.handleClose.bind(this)}>
                 <Modal.Header closeButton>
@@ -31,7 +31,8 @@ class TagsManager extends React.Component<ITagsManagerProps, ITagsManagerState> 
                     {this.renderTags()}
 
                     <div className="add-button-container text-right">
-                        <Button bsStyle="primary" className="add" bsSize="xsmall" onClick={this.handleShowCreateTag.bind(this)}>
+                        <Button bsStyle="primary" className="add" bsSize="xsmall"
+                                onClick={this.handleShowCreateTag.bind(this)}>
                             <Glyphicon glyph="plus"/>
                         </Button>
                     </div>
@@ -41,12 +42,12 @@ class TagsManager extends React.Component<ITagsManagerProps, ITagsManagerState> 
                     <Button onClick={this.handleClose.bind(this)}>Close</Button>
                 </Modal.Footer>
             </Modal>
-        )
+        );
     }
 
-    renderTags() {
-        if (this.props.tags.length == 0) {
-            return <div>No tags defined!</div>
+    private renderTags(): React.ReactElement<any> {
+        if (this.props.tags.length === 0) {
+            return <div>No tags defined!</div>;
         }
 
         return (
@@ -54,12 +55,12 @@ class TagsManager extends React.Component<ITagsManagerProps, ITagsManagerState> 
                 {this.renderDefinedTags()}
                 {this.renderNewTag()}
             </ListGroup>
-        )
+        );
     }
 
-    renderDefinedTags() {
-        return _.map(this.props.tags, (tag:ITag) => {
-            if (this.state.editTagId == tag.tagId) {
+    private renderDefinedTags(): React.ReactElement<any>[] {
+        return _.map(this.props.tags, (tag: ITag) => {
+            if (this.state.editTagId === tag.tagId) {
                 return this.renderUpdateTag(tag);
             } else {
                 return this.renderTag(tag);
@@ -67,11 +68,13 @@ class TagsManager extends React.Component<ITagsManagerProps, ITagsManagerState> 
         });
     }
 
-    renderTag(tag:ITag) {
+    private renderTag(tag: ITag): React.ReactElement<any> {
         return (
             <ListGroupItem key={tag.tagId} className="tag-item">
                 <Row>
-                    <Col xs={1}><Glyphicon glyph="tag"/></Col>
+                    <Col xs={1}>
+                        <Glyphicon glyph="tag"/>
+                    </Col>
                     <Col xs={10}>
                         <div onClick={this.handleShowEditTag.bind(this, tag.tagId, tag.name)}>{tag.name}</div>
                     </Col>
@@ -83,29 +86,32 @@ class TagsManager extends React.Component<ITagsManagerProps, ITagsManagerState> 
                     </Col>
                 </Row>
             </ListGroupItem>
-        )
+        );
     }
 
-    renderUpdateTag(tag:ITag) {
+    private renderUpdateTag(tag: ITag): React.ReactElement<any> {
         return (
             <ListGroupItem key={"edit-" + tag.tagId} className="tag-item edit-tag">
                 <Row>
-                    <Col xs={1}><Glyphicon glyph="tag"/></Col>
+                    <Col xs={1}>
+                        <Glyphicon glyph="tag"/>
+                    </Col>
                     <Col xs={10}>
                         <Input type="text" bsSize="small" placeholder="Tag name" value={this.state.tagName}
                                onChange={this.handleTagNameChange.bind(this)}/>
                     </Col>
                     <Col xs={1} className="save-button-container text-right">
-                        <Button bsStyle="success" bsSize="xsmall" className="update" onClick={this.handleUpdateTag.bind(this)}>
+                        <Button bsStyle="success" bsSize="xsmall" className="update"
+                                onClick={this.handleUpdateTag.bind(this)}>
                             <Glyphicon glyph="ok"/>
                         </Button>
                     </Col>
                 </Row>
             </ListGroupItem>
-        )
+        );
     }
 
-    renderNewTag() {
+    private renderNewTag(): React.ReactElement<any> {
         if (!this.state.showCreateTag) {
             return;
         }
@@ -113,23 +119,26 @@ class TagsManager extends React.Component<ITagsManagerProps, ITagsManagerState> 
         return (
             <ListGroupItem key="new-tag" className="tag-item new-tag">
                 <Row>
-                    <Col xs={1}><Glyphicon glyph="tag"/></Col>
+                    <Col xs={1}>
+                        <Glyphicon glyph="tag"/>
+                    </Col>
                     <Col xs={10}>
                         <Input type="text" bsSize="small" placeholder="Tag name" value={this.state.tagName}
                                onChange={this.handleTagNameChange.bind(this)}/>
                     </Col>
                     <Col xs={1} className="save-button-container text-right">
-                        <Button bsStyle="success" bsSize="xsmall" className="save" onClick={this.handleCreateTag.bind(this)}>
+                        <Button bsStyle="success" bsSize="xsmall" className="save"
+                                onClick={this.handleCreateTag.bind(this)}>
                             <Glyphicon glyph="ok"/>
                         </Button>
                     </Col>
                 </Row>
             </ListGroupItem>
-        )
+        );
     }
 
-    handleCreateTag() {
-        let newTag:ITag = {
+   private handleCreateTag(): void {
+        let newTag: ITag = {
             tagId: IdUtil.newId(),
             name: this.state.tagName
         };
@@ -142,8 +151,8 @@ class TagsManager extends React.Component<ITagsManagerProps, ITagsManagerState> 
         });
     }
 
-    handleUpdateTag() {
-        let updatedTag:ITag = {
+    private handleUpdateTag(): void {
+        let updatedTag: ITag = {
             tagId: this.state.editTagId,
             name: this.state.tagName
         };
@@ -156,17 +165,17 @@ class TagsManager extends React.Component<ITagsManagerProps, ITagsManagerState> 
         });
     }
 
-    handleDeleteTag(tagId:string) {
+    private handleDeleteTag(tagId: string): void {
         this.props.dispatch(removeTag(tagId));
     }
 
-    handleShowCreateTag() {
+    private handleShowCreateTag(): void {
         this.setState({
             showCreateTag: !this.state.showCreateTag
         });
     }
 
-    handleShowEditTag(tagId, tagName) {
+    private handleShowEditTag(tagId: string, tagName: string): void {
         if (this.state.showCreateTag) {
             return;
         }
@@ -177,27 +186,27 @@ class TagsManager extends React.Component<ITagsManagerProps, ITagsManagerState> 
         });
     }
 
-    handleTagNameChange(ev) {
+    private handleTagNameChange(ev: any): void {
         this.setState({
             tagName: ev.target.value
         });
     }
 
-    handleClose() {
+    private handleClose(): void {
         this.props.onClose();
     }
 }
 
 interface ITagsManagerProps extends React.Props<TagsManager> {
-    tags: ITag[],
-    onClose: () => void,
-    dispatch: (action) => void
+    tags: ITag[];
+    onClose: () => void;
+    dispatch: (action: IAction) => void;
 }
 
 interface ITagsManagerState {
-    showCreateTag?: boolean,
-    tagName?: string,
-    editTagId?: string
+    showCreateTag?: boolean;
+    tagName?: string;
+    editTagId?: string;
 }
 
 export default TagsManager;

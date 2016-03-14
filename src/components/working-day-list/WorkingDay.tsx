@@ -1,34 +1,33 @@
 import * as React from "react";
 import moment from "moment";
 import "moment-duration-format";
-import { Grid, Row, Col, Panel, Collapse, ListGroup, ListGroupItem, Glyphicon, Button } from "react-bootstrap";
+import { Row, Col, Panel } from "react-bootstrap";
 
-import Callout from "../../widgets/callout/Callout";
 import TaskItem from "./../task-item/TaskItem";
 import { ITask, IProject, ITag, ITaskTag, IBreak } from "../../model/store";
 import DateUtil from "../../utils/DateUtil";
 
 class WorkingDay extends React.Component<IWorkingDayProps, IWorkingDayState> {
-    render() {
+    public render(): React.ReactElement<any> {
         return (
             <Panel className="working-day" header={this.renderPanelHeader()} collapsible defaultExpanded={true}>
                 {this.renderTasks()}
             </Panel>
-        )
+        );
     }
 
-    renderPanelHeader() {
-        let daySummary:IDaySummary = this.computeDaySummary();
+    private renderPanelHeader(): React.ReactElement<any> {
+        let daySummary: IDaySummary = this.computeDaySummary();
 
-        let date:string;
+        let date: string;
         if (daySummary.startDate !== daySummary.endDate) {
             date = daySummary.startDate + " - " + daySummary.endDate;
         } else {
             date = daySummary.startDate;
         }
 
-        let workDuration = this.computeWorkDuration();
-        let breakDuration = this.computeBreakDuration();
+        let workDuration: moment.Duration = this.computeWorkDuration();
+        let breakDuration: moment.Duration = this.computeBreakDuration();
 
         return (
             <Row>
@@ -39,43 +38,43 @@ class WorkingDay extends React.Component<IWorkingDayProps, IWorkingDayState> {
                     <div>{DateUtil.formatDuration(breakDuration)}</div>
                 </Col>
             </Row>
-        )
+        );
     }
 
-    renderTasks() {
-        return _.map(this.props.tasks, (task:ITask, index:number) => {
-            let breaks = _.filter(this.props.breaks, (breakItem: IBreak) => breakItem.taskId == task.taskId);
+    private renderTasks(): React.ReactElement<any>[] {
+        return _.map(this.props.tasks, (task: ITask, index: number) => {
+            let breaks: IBreak[] = _.filter(this.props.breaks, (breakItem: IBreak) => breakItem.taskId === task.taskId);
 
             return (
                 <TaskItem key={index} task={task} projects={this.props.projects} breaks={breaks}
-                          tags={this.props.tags} taskTags={this.props.taskTags} isOdd={index%2 == 1}/>
-            )
+                          tags={this.props.tags} taskTags={this.props.taskTags} isOdd={index % 2 === 1}/>
+            );
         });
     }
 
-    computeDaySummary():IDaySummary {
-        let tasks = this.props.tasks;
-        let daySummary:IDaySummary = {} as IDaySummary;
+    private computeDaySummary(): IDaySummary {
+        let tasks: ITask[] = this.props.tasks;
+        let daySummary: IDaySummary = {} as IDaySummary;
 
         daySummary.startDate = DateUtil.extractDate(tasks[0].startDate);
-        daySummary.endDate = DateUtil.extractDate(tasks[tasks.length-1].endDate);
+        daySummary.endDate = DateUtil.extractDate(tasks[tasks.length - 1].endDate);
 
         return daySummary;
     }
 
-    computeWorkDuration():moment.Duration {
-        let workingDuration = DateUtil.computeTotalDuration(this.props.tasks);
-        let breakDuration = this.computeBreakDuration();
+    private computeWorkDuration(): moment.Duration {
+        let workingDuration: moment.Duration = DateUtil.computeTotalDuration(this.props.tasks);
+        let breakDuration: moment.Duration = this.computeBreakDuration();
 
         return workingDuration.subtract(breakDuration);
     }
 
-    computeBreakDuration():moment.Duration {
-        let totalBreakDuration = moment.duration();
+    private computeBreakDuration(): moment.Duration {
+        let totalBreakDuration: moment.Duration = moment.duration();
 
-        _.each(this.props.tasks, (task:ITask) => {
-            let breaks = _.filter(this.props.breaks, (breakItem: IBreak) => breakItem.taskId == task.taskId);
-            let breakDuration = DateUtil.computeTotalDuration(breaks);
+        _.each(this.props.tasks, (task: ITask) => {
+            let breaks: IBreak[] = _.filter(this.props.breaks, (breakItem: IBreak) => breakItem.taskId === task.taskId);
+            let breakDuration: moment.Duration = DateUtil.computeTotalDuration(breaks);
 
             totalBreakDuration.add(breakDuration);
         });
@@ -85,18 +84,19 @@ class WorkingDay extends React.Component<IWorkingDayProps, IWorkingDayState> {
 }
 
 interface IWorkingDayProps extends React.Props<WorkingDay> {
-    tasks: ITask[],
-    projects: IProject[],
-    tags: ITag[],
-    taskTags: ITaskTag[],
-    breaks: IBreak[]
+    tasks: ITask[];
+    projects: IProject[];
+    tags: ITag[];
+    taskTags: ITaskTag[];
+    breaks: IBreak[];
 }
 
-interface IWorkingDayState {}
+interface IWorkingDayState {
+}
 
 interface IDaySummary {
-    startDate: string,
-    endDate: string
+    startDate: string;
+    endDate: string;
 }
 
 export default WorkingDay;

@@ -1,12 +1,12 @@
 import * as React from "react";
-import { Row, Col, Input, Button, Glyphicon } from "react-bootstrap";
+import { Input, Button, Glyphicon } from "react-bootstrap";
 
 import { IEntry } from "../../utils/CommonInterfaces";
 
 import "./EditableSelect.less";
 
 class EditableSelect extends React.Component<IEditableSelectProps, IEditableSelectState> {
-    constructor(props:IEditableSelectProps) {
+    constructor(props: IEditableSelectProps) {
         super(props);
 
         this.state = {
@@ -15,23 +15,25 @@ class EditableSelect extends React.Component<IEditableSelectProps, IEditableSele
         };
     }
 
-    componentDidUpdate() {
+    /* tslint:disable:no-string-literal */
+    public componentDidUpdate(): void {
         if (this.state.showEdit) {
-            let inputComponent:any = this.refs["selectInput"];
+            let inputComponent: any = this.refs["selectInput"];
 
             inputComponent.refs["input"].focus();
         }
     }
+    /* tslint:enable:no-string-literal */
 
-    render() {
+    public render(): React.ReactElement<any> {
         return (
             <div className="editable-select">
                 {this.renderContent()}
             </div>
-        )
+        );
     }
 
-    renderContent() {
+    private renderContent(): React.ReactElement<any> {
         if (this.state.showEdit) {
             return this.renderEdit();
         } else {
@@ -39,22 +41,22 @@ class EditableSelect extends React.Component<IEditableSelectProps, IEditableSele
         }
     }
 
-    renderText() {
-        let selectedEntry:IEntry = _.find(this.props.availableValues, (entry:IEntry) => (
-            entry.id == this.props.selectedValue
+    private renderText(): React.ReactElement<any> {
+        let selectedEntry: IEntry = _.find(this.props.availableValues, (entry: IEntry) => (
+            entry.id === this.props.selectedValue
         ));
 
-        let text:string = "";
+        let text: string = "";
         if (selectedEntry) {
             text = selectedEntry.label;
         }
 
         return (
             <div className="text-container" onClick={this.handleClick.bind(this)}>{text}</div>
-        )
+        );
     }
 
-    renderEdit() {
+    private renderEdit(): React.ReactElement<any> {
         return (
             <div className="select-container">
                 <Input ref="selectInput" type="select" value={this.state.selectedValue}
@@ -65,51 +67,51 @@ class EditableSelect extends React.Component<IEditableSelectProps, IEditableSele
                     {this.renderValues()}
                 </Input>
             </div>
-        )
+        );
     }
 
-    renderGlyph() {
+    private renderGlyph(): React.ReactElement<any> {
         if (this.props.iconId) {
-            return <Glyphicon glyph={this.props.iconId}/>
+            return <Glyphicon glyph={this.props.iconId}/>;
         }
     }
 
-    renderValues() {
-        return _.map(this.props.availableValues, (entry:IEntry) => (
+    private renderValues(): React.ReactElement<any>[] {
+        return _.map(this.props.availableValues, (entry: IEntry) => (
             <option key={entry.id} value={entry.id}>{entry.label}</option>
         ));
     }
 
-    renderSaveButton() {
+    private renderSaveButton(): React.ReactElement<any> {
         return (
             <Button bsStyle="success" bsSize="xsmall" className="save" onClick={this.handleSaveChange.bind(this)}>
                 <Glyphicon glyph="ok"/>
             </Button>
-        )
+        );
     }
 
-    handleClick() {
+    private handleClick(): void {
         this.setState({
             showEdit: true
         });
     }
 
-    handleValueChange(ev) {
+    private handleValueChange(ev: any): void {
         this.setState({
             selectedValue: ev.target.value
         });
     }
 
-    handleKeyDown(ev:React.KeyboardEvent) {
-        if (ev.keyCode == 13) { // handle Enter
+    private handleKeyDown(ev: React.KeyboardEvent): void {
+        if (ev.keyCode === 13) { // handle Enter
             this.handleSaveChange();
-        } else if (ev.keyCode == 27) { // handle Escape
+        } else if (ev.keyCode === 27) { // handle Escape
             this.handleCancel();
         }
     }
 
-    handleSaveChange() {
-        if (typeof this.props.onChange == "function") {
+    private handleSaveChange(): void {
+        if (typeof this.props.onChange === "function") {
             this.props.onChange(this.state.selectedValue);
         }
 
@@ -118,7 +120,7 @@ class EditableSelect extends React.Component<IEditableSelectProps, IEditableSele
         });
     }
 
-    handleCancel() {
+    private handleCancel(): void {
         this.setState({
             selectedValue: this.props.selectedValue,
             showEdit: false
@@ -127,15 +129,15 @@ class EditableSelect extends React.Component<IEditableSelectProps, IEditableSele
 }
 
 interface IEditableSelectProps extends React.Props<EditableSelect> {
-    availableValues: IEntry[],
-    selectedValue: string,
-    onChange: (value:string) => void,
-    iconId?: string
+    availableValues: IEntry[];
+    selectedValue: string;
+    onChange: (value: string) => void;
+    iconId?: string;
 }
 
 interface IEditableSelectState {
-    showEdit?: boolean,
-    selectedValue?: string
+    showEdit?: boolean;
+    selectedValue?: string;
 }
 
 export default EditableSelect;

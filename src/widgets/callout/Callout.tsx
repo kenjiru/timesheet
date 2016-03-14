@@ -1,19 +1,18 @@
 import * as React from "react";
-import * as ReactDOM from "react-dom";
 
 import "./Callout.less";
 
 class Callout extends React.Component<ICalloutProps, ICalloutState> {
-    render() {
+    public render(): React.ReactElement<any> {
         return (
             <div className={this.getClassName()}>
                 {this.props.children}
             </div>
-        )
+        );
     }
 
-    getClassName() {
-        let className = "bs-callout";
+    private getClassName(): string {
+        let className: string = "bs-callout";
 
         if (this.props.className) {
             className += " " + this.props.className;
@@ -28,8 +27,8 @@ class Callout extends React.Component<ICalloutProps, ICalloutState> {
 }
 
 interface ICalloutProps extends React.Props<Callout> {
-    className?: string,
-    bsStyle?: string
+    className?: string;
+    bsStyle?: string;
 }
 
 interface ICalloutState {}
