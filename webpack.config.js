@@ -66,6 +66,9 @@ var config = {
 				test: /\.(png|jpg|gif|eot|ttf|woff|woff2|svg)$/,
 				exclude: /public/,
 				loader: 'url-loader?limit=5000&name=[path][name].[ext]?[hash]'
+			}, {
+				test: /\.xml/,
+				loader: "raw-loader"
 			}
 		]
 	},
@@ -76,8 +79,7 @@ var config = {
 		new ExtractTextPlugin("[name].css?[hash]"),
 		new ProvidePlugin({
 			$: "jquery",
-			jQuery: "jquery",
-			React: "react/addons"
+			jQuery: "jquery"
 		})
 	]
 };
