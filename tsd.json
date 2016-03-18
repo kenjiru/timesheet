@@ -37,6 +37,12 @@
 		},
 		"jquery/jquery.d.ts": {
 			"commit": "55c750ace821f85e6643bbdb249dbd0b15a3df78"
+		},
+		"rest/rest.d.ts": {
+			"commit": "ce8ae773688d2244ba11fdf3378fcd68f773e1c4"
+		},
+		"when/when.d.ts": {
+			"commit": "ce8ae773688d2244ba11fdf3378fcd68f773e1c4"
 		}
 	}
 }
