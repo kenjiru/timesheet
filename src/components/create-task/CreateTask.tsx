@@ -161,9 +161,23 @@ class CreateTask extends React.Component<ICreateTaskProps, ICreateTaskState> {
         let task: ITask = {
             taskId,
             projectId: this.state.projectId,
+            description: this.state.description,
             startDate: taskInterval.startDate,
             endDate: taskInterval.endDate,
-            description: this.state.description
+            location: null,
+            locationEnd: null,
+            phoneNumber: null,
+            distance: null,
+            feeling: null,
+            billable: null,
+            paid: null,
+            rateId: null,
+            user: null,
+            deleted: false,
+            lastUpdate: null,
+            type: null,
+            startTime: null,
+            endTime: null
         };
 
         this.props.dispatch(addTask(task));
@@ -183,7 +197,9 @@ class CreateTask extends React.Component<ICreateTaskProps, ICreateTaskState> {
             let taskTag: ITaskTag = {
                 id: IdUtil.newId(),
                 taskId,
-                tagId
+                tagId,
+                deleted: false,
+                lastUpdate: null
             };
             this.props.dispatch(addTaskTag(taskTag));
         });
@@ -209,7 +225,13 @@ class CreateTask extends React.Component<ICreateTaskProps, ICreateTaskState> {
                 breakId: IdUtil.newId(),
                 taskId,
                 startDate: DateUtil.getDateTime(startDate),
-                endDate: DateUtil.getDateTime(endDate)
+                endDate: DateUtil.getDateTime(endDate),
+                description: null,
+                user: null,
+                deleted: false,
+                lastUpdate: null,
+                startTime: null,
+                endTime: null
             });
         }
 

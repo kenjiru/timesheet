@@ -137,10 +137,13 @@ class TagsManager extends React.Component<ITagsManagerProps, ITagsManagerState> 
         );
     }
 
-   private handleCreateTag(): void {
+    private handleCreateTag(): void {
         let newTag: ITag = {
             tagId: IdUtil.newId(),
-            name: this.state.tagName
+            name: this.state.tagName,
+            color: null,
+            deleted: false,
+            lastUpdate: null
         };
 
         this.props.dispatch(addTag(newTag));
@@ -154,7 +157,10 @@ class TagsManager extends React.Component<ITagsManagerProps, ITagsManagerState> 
     private handleUpdateTag(): void {
         let updatedTag: ITag = {
             tagId: this.state.editTagId,
-            name: this.state.tagName
+            name: this.state.tagName,
+            color: null,
+            deleted: false,
+            lastUpdate: null
         };
 
         this.props.dispatch(updateTag(updatedTag));

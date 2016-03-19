@@ -1,7 +1,6 @@
 /* tslint:disable:no-switch-case-fall-through */
 
 import _ from "lodash";
-import IdUtil from "../utils/IdUtil";
 
 import { IStore, ITag, ITask, ITaskTag, IBreak } from "./store";
 import { IAction, ADD_TASK, UPDATE_TASK, ADD_TASK_TAG, REMOVE_TASK_TAG, ADD_BREAK, UPDATE_BREAK,
@@ -9,24 +8,7 @@ import { IAction, ADD_TASK, UPDATE_TASK, ADD_TASK_TAG, REMOVE_TASK_TAG, ADD_BREA
 
 let defaultStore: IStore = {
     tasks: [],
-    projects: [{
-        projectId: IdUtil.newId(),
-        name: "Control Panel",
-        employer: "MobFox",
-        description: ""
-    }, {
-        projectId: IdUtil.newId(),
-        name: "Private",
-        employer: "",
-        description: ""
-    }],
-    tags: [{
-        tagId: IdUtil.newId(),
-        name: "Office"
-    }, {
-        tagId: IdUtil.newId(),
-        name: "Home"
-    }],
+    projects: [],
     taskTags: [],
     breaks: []
 };

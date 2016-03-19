@@ -130,13 +130,17 @@ class TaskItem extends React.Component<ITaskItemProps, ITaskItemState> {
         _.each(tagsToDelete, (tagId: string) => store.dispatch(removeTaskTag({
             id: "not-needed",
             taskId,
-            tagId
+            tagId,
+            deleted: null,
+            lastUpdate: null
         })));
 
         _.each(tagsToAdd, (tagId: string) => store.dispatch(addTaskTag({
             id: IdUtil.newId(),
             taskId,
-            tagId
+            tagId,
+            deleted: false,
+            lastUpdate: null
         })));
     }
 
