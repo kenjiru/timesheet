@@ -9,6 +9,8 @@ import store, { IStore } from "./model/store";
 import { updateStore } from "./model/actions";
 import TaskManager from "./components/task-manager/TaskManager";
 
+import XmlUtil from "./utils/XmlUtil";
+
 import "bootstrap";
 import "bootstrap/dist/css/bootstrap.css";
 import "react-select/dist/react-select.css";
@@ -16,7 +18,6 @@ import "react-select/dist/react-select.css";
 import "./App.less";
 
 class App extends React.Component<IAppProps, IAppState> {
-
     public render(): React.ReactElement<any> {
         return (
             <Provider store={store}>
@@ -30,8 +31,9 @@ class App extends React.Component<IAppProps, IAppState> {
                             <Col xs={6} className="text-right">
                                 <h1></h1>
                                 <ButtonGroup>
-                                    <Button onClick={this.saveStore.bind(this)}>Save Store</Button>
-                                    <Button onClick={this.loadStore.bind(this)}>Load Store</Button>
+                                    <Button onClick={this.loadFromXml}>Load from XML</Button>
+                                    <Button onClick={this.saveStore}>Save Store</Button>
+                                    <Button onClick={this.loadStore}>Load Store</Button>
                                 </ButtonGroup>
                             </Col>
                         </Row>
@@ -55,6 +57,14 @@ class App extends React.Component<IAppProps, IAppState> {
 
         store.dispatch(updateStore(state));
         console.log("Load Store: ", state);
+    }
+
+    private loadFromXml(): void {
+        XmlUtil.loadMockXml().then((state: IStore) => {
+            console.log(state);
+
+            store.dispatch(updateStore(state));
+        });
     }
 }
 
