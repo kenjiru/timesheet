@@ -32,6 +32,9 @@ class App extends React.Component<IAppProps, IAppState> {
                                 <h1></h1>
                                 <ButtonGroup>
                                     <Button onClick={this.loadFromXml}>Load from XML</Button>
+                                    <Button onClick={this.saveToXml}>Save to XML</Button>
+                                </ButtonGroup>
+                                <ButtonGroup>
                                     <Button onClick={this.saveStore}>Save Store</Button>
                                     <Button onClick={this.loadStore}>Load Store</Button>
                                 </ButtonGroup>
@@ -65,6 +68,14 @@ class App extends React.Component<IAppProps, IAppState> {
 
             store.dispatch(updateStore(state));
         });
+    }
+
+    private saveToXml(): void {
+        let state: IStore = store.getState();
+        let xmlStr: string = XmlUtil.convertStoreToXml(state);
+
+        console.log(state);
+        console.log(xmlStr);
     }
 }
 

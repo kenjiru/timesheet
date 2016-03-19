@@ -1,5 +1,6 @@
 import { IStore, IProject, ITask, IBreak, ITag, ITaskTag } from "../model/store";
 import { RestClient, Response, Promise, createRestClient } from "./RestClient";
+import js2xmlparser from "js2xmlparser";
 
 import "../../mock/simple.xml";
 
@@ -29,6 +30,19 @@ class XmlUtil {
 
             return XmlUtil.convertXmlToStore(xmlContent);
         });
+    }
+
+    public static convertStoreToXml(state: IStore): string {
+        let xmlStr: string = js2xmlparser("root", state, {
+            arrayMap: {
+                projects: "project",
+                tasks: "task",
+                tags: "tag",
+                taskTags: "taskTag"
+            }
+        });
+
+        return xmlStr;
     }
 
     public static convertXmlToStore(xmlContent: string): IStore {

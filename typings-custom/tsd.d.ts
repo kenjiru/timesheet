@@ -3,3 +3,5 @@
 /// <reference path="./moment-duration-format.d.ts" />
 /// <reference path="./store.d.ts" />
 /// <reference path="./react-select.d.ts" />
+/// <reference path="./js2xmlparser.d.ts" />
+/// <reference path="./js2xmlparser.d.ts" />
