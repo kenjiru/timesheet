@@ -1,5 +1,4 @@
 import * as React from "react";
-import moment from "moment";
 import { Grid, Row, Col, Button, Input, ButtonInput, Glyphicon } from "react-bootstrap";
 import Select from "react-select";
 
@@ -116,7 +115,7 @@ class CreateTask extends React.Component<ICreateTaskProps, ICreateTaskState> {
     }
 
     private handleStartDateChanged(date: Date): void {
-        let dateStr: string = moment(date).format("DD-MM-YYYY");
+        let dateStr: string = DateUtil.extractDate(date);
 
         this.setState({
             startDate: dateStr
@@ -203,11 +202,14 @@ class CreateTask extends React.Component<ICreateTaskProps, ICreateTaskState> {
         let workingPeriods: ITimeInterval[] = this.computeWorkingPeriods();
 
         for (let i: number = 0; i < workingPeriods.length - 1; i++) {
+            let startDate: string = this.state.startDate + " " + workingPeriods[i].endTime;
+            let endDate: string = this.state.startDate + " " + workingPeriods[i + 1].startTime;
+
             breaks.push({
                 breakId: IdUtil.newId(),
                 taskId,
-                startDate: this.state.startDate + " " + workingPeriods[i].endTime,
-                endDate: this.state.startDate + " " + workingPeriods[i + 1].startTime
+                startDate: DateUtil.getDateTime(startDate),
+                endDate: DateUtil.getDateTime(endDate)
             });
         }
 
@@ -220,8 +222,8 @@ class CreateTask extends React.Component<ICreateTaskProps, ICreateTaskState> {
         let endDate: string = this.state.startDate + " " + workingPeriods[workingPeriods.length - 1].endTime;
 
         return {
-            startDate,
-            endDate
+            startDate: DateUtil.getDateTime(startDate),
+            endDate: DateUtil.getDateTime(endDate)
         };
     }
 

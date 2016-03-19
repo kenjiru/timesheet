@@ -95,8 +95,11 @@ class TaskItem extends React.Component<ITaskItemProps, ITaskItemState> {
         let task: ITask = _.clone(this.props.task);
         let taskInterval: ITimeInterval = DateUtil.computeTimeInterval(intervalStr);
 
-        task.startDate = DateUtil.extractDate(task.startDate) + " " + taskInterval.startTime;
-        task.endDate = DateUtil.extractDate(task.endDate) + " " + taskInterval.endTime;
+        let startDate: string = DateUtil.extractDate(task.startDate) + " " + taskInterval.startTime;
+        let endDate: string = DateUtil.extractDate(task.endDate) + " " + taskInterval.endTime;
+
+        task.startDate = DateUtil.getDateTime(startDate);
+        task.endDate = DateUtil.getDateTime(endDate);
 
         this.updateStore(task);
     }

@@ -2,6 +2,8 @@ import moment from "moment";
 import { ITask, IBreak } from "../model/store";
 
 class DateUtil {
+    public static DATE_TIME_FORMAT: string = "DD/MM/YYYY HH:mm";
+
     public static computeTotalDuration(entities: ITask[]|IBreak[]): moment.Duration {
         let totalDuration: moment.Duration = moment.duration();
 
@@ -14,8 +16,8 @@ class DateUtil {
     }
 
     public static computeDuration(entity: ITask|IBreak): moment.Duration {
-        let start: moment.Moment = DateUtil.getDate(entity.startDate);
-        let end: moment.Moment = DateUtil.getDate(entity.endDate);
+        let start: moment.Moment = moment(entity.startDate);
+        let end: moment.Moment = moment(entity.endDate);
 
         return moment.duration(end.diff(start));
     }
@@ -33,16 +35,16 @@ class DateUtil {
         return duration.format("HH:mm");
     }
 
-    public static getDate(date: string): moment.Moment {
-        return moment(date, "DD/MM/YYYY HH:mm");
+    public static getDateTime(date: string): string {
+        return moment(date, DateUtil.DATE_TIME_FORMAT).format();
     }
 
-    public static extractDate(date: string): string {
-        return moment(date, "DD/MM/YYYY HH:mm").format("DD/MM/YYYY");
+    public static extractDate(date: string|Date): string {
+        return moment(date).format("DD/MM/YYYY");
     }
 
-    public static extractTime(date: string): string {
-        return moment(date, "DD/MM/YYYY HH:mm").format("HH:mm");
+    public static extractTime(date: string|Date): string {
+        return moment(date).format("HH:mm");
     }
 }
 

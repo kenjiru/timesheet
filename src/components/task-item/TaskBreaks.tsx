@@ -59,8 +59,11 @@ class TaskBreaks extends React.Component<ITaskBreaksProps, ITaskBreaksState> {
 
         let breakInterval: ITimeInterval = DateUtil.computeTimeInterval(intervalStr);
 
-        breakItem.startDate = DateUtil.extractDate(breakItem.startDate) + " " + breakInterval.startTime;
-        breakItem.endDate = DateUtil.extractDate(breakItem.endDate) + " " + breakInterval.endTime;
+        let startDate: string = DateUtil.extractDate(breakItem.startDate) + " " + breakInterval.startTime;
+        let endDate: string = DateUtil.extractDate(breakItem.endDate) + " " + breakInterval.endTime;
+
+        breakItem.startDate = DateUtil.getDateTime(startDate);
+        breakItem.endDate = DateUtil.getDateTime(endDate);
 
         this.updateStore(breakItem);
     }
