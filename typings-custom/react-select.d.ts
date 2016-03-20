@@ -64,5 +64,5 @@ declare module "react-select" {
 
     var ReactSelect: SelectWithAsync;
 
-    export default ReactSelect;
+    export = ReactSelect;
 }

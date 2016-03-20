@@ -1,6 +1,6 @@
 /* tslint:disable:no-switch-case-fall-through */
 
-import _ from "lodash";
+import * as _ from "lodash";
 
 import { IStore, ITag, ITask, ITaskTag, IBreak } from "./store";
 import { IAction, ADD_TASK, UPDATE_TASK, ADD_TASK_TAG, REMOVE_TASK_TAG, ADD_BREAK, UPDATE_BREAK,

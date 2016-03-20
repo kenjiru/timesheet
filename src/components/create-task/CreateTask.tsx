@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Grid, Row, Col, Button, Input, ButtonInput, Glyphicon } from "react-bootstrap";
-import Select from "react-select";
+import * as Select from "react-select";
 
 import TagsManager from "../tags-manager/TagsManager";
 import DatePicker from "../../widgets/date-picker/DatePicker";
