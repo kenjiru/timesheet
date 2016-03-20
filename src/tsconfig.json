@@ -5,13 +5,13 @@
 		"**/*.{ts,tsx}"
 	],
 	"compilerOptions": {
-		"jsx": "preserve",
-		"target": "es6",
+		"jsx": "react",
+		"target": "es5",
 		"noImplicitAny": false,
 		"removeComments": false,
 		"preserveConstEnums": true,
 		"sourceMap": true,
-		"module": "es6",
+		"module": "amd",
 		"allowSyntheticDefaultImports": true
 	},
 	"files": [

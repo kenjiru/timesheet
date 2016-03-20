@@ -2,24 +2,17 @@ var path = require('path');
 var webpack = require("webpack");
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
 var HtmlWebpackPlugin = require('html-webpack-plugin');
-var ProvidePlugin = webpack.ProvidePlugin;
-
 var argv = require('optimist').argv;
 
 var modules_dir = path.join(__dirname, "/node_modules");
 var src_dir = path.join(__dirname, "/src");
 
 var config = {
+	// Fast options are: "cheap-module-eval-source-map" "cheap-module-source-map"
+	devtool: "cheap-module-eval-source-map",
 	context: __dirname,
 	entry: {
-		app: envDep(
-			[
-				'webpack-dev-server/client?http://0.0.0.0:8080',
-				'webpack/hot/dev-server',
-				src_dir + '/App.tsx'
-			],
-			src_dir + '/App.tsx'
-		)
+		app: src_dir + "/App.tsx"
 	},
 	output: {
 		path: path.join(__dirname, '/dist'),
@@ -37,17 +30,10 @@ var config = {
 		],
 		loaders: [
 			{
-				test: /\.js$/,
-				loaders: envDep(
-					['react-hot', 'babel-loader'],
-					['babel-loader']
-				),
-				include: src_dir
-			}, {
 				test: /\.(tsx|ts)$/,
 				loaders: envDep(
-					['react-hot', 'babel-loader', 'ts-loader'],
-					['babel-loader', 'ts-loader']
+					["react-hot", "ts-loader"],
+					["ts-loader"]
 				),
 				include: src_dir
 			}, {
@@ -77,7 +63,7 @@ var config = {
 		    title: "React TypeScript demo"
 		}),
 		new ExtractTextPlugin("[name].css?[hash]"),
-		new ProvidePlugin({
+		new webpack.ProvidePlugin({
 			$: "jquery",
 			jQuery: "jquery"
 		})
@@ -94,5 +80,5 @@ function envDep(dev, prod) {
 }
 
 function isDev() {
-	return !!argv.d;
+	return !!argv.dev;
 }
