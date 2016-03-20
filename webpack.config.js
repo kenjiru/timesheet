@@ -12,7 +12,11 @@ var config = {
 	devtool: "cheap-module-eval-source-map",
 	context: __dirname,
 	entry: {
-		app: src_dir + "/App.tsx"
+		app: src_dir + "/App.tsx",
+		vendor: [
+			"react", "redux", "react-redux", "rest", "when", "core-js", "jquery", "lodash", "moment",
+			"moment-duration-format", "bootstrap", "bootstrap-datepicker", "react-bootstrap", "react-select", "store"
+		]
 	},
 	output: {
 		path: path.join(__dirname, '/dist'),
@@ -61,6 +65,18 @@ var config = {
 	plugins: [
 		new HtmlWebpackPlugin({
 		    title: "React TypeScript demo"
+		}),
+		new webpack.optimize.CommonsChunkPlugin({
+			names: [ "vendor" ],
+			filename: "[name].js[hash]"
+		}),
+		new webpack.SourceMapDevToolPlugin({
+			test: /\.js/,
+			exclude: [
+				/vendor\.js/
+			],
+			filename: '[file].map[hash]',
+			columns: false
 		}),
 		new ExtractTextPlugin("[name].css?[hash]"),
 		new webpack.ProvidePlugin({
