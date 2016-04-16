@@ -1,8 +1,10 @@
 {
 	"compileOnSave": false,
 	"filesGlob": [
-		"../typings/**/*.*.ts",
-		"**/*.{ts,tsx}"
+		"./typings/**/*.*.ts",
+		"./typings-custom/*.*.ts",
+		"./src/**/*.{ts,tsx}",
+		"./test/**/*.ts"
 	],
 	"compilerOptions": {
 		"jsx": "react",
@@ -11,16 +13,10 @@
 		"removeComments": false,
 		"preserveConstEnums": true,
 		"sourceMap": true,
-		"module": "amd",
 		"allowSyntheticDefaultImports": true
 	},
 	"files": [
-		"../typings-custom/tsd.d.ts",
-		"../typings/tsd.d.ts",
-		"App.tsx"
-	],
-	"exclude": [],
-	"atom": {
-		"rewriteTsconfig": true
-	}
+		"./typings-custom/tsd.d.ts",
+		"./typings/tsd.d.ts"
+	]
 }
