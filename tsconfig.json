@@ -13,7 +13,9 @@
 		"removeComments": false,
 		"preserveConstEnums": true,
 		"sourceMap": true,
-		"allowSyntheticDefaultImports": true
+		"allowSyntheticDefaultImports": true,
+		"experimentalDecorators": true,
+		"emitDecoratorMetadata": true
 	},
 	"files": [
 		"./typings-custom/tsd.d.ts",

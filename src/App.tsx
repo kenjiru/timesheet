@@ -14,6 +14,8 @@ import "bootstrap";
 import "bootstrap/dist/css/bootstrap.css";
 import "react-select/dist/react-select.css";
 
+import "reflect-metadata";
+
 import "./App.less";
 
 class App extends React.Component<IAppProps, IAppState> {
