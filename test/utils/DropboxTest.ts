@@ -1,7 +1,7 @@
 import * as _ from "lodash";
 import { expect } from "chai";
 
-import Dropbox, { IFolderEntry, IListFolderResponse, IDownloadResponse, IUploadResponse } from "../src/utils/Dropbox";
+import Dropbox, { IFolderEntry, IListFolderResponse, IDownloadResponse, IUploadResponse } from "../../src/utils/Dropbox";
 
 describe("Dropbox", () => {
     let dropbox: Dropbox;

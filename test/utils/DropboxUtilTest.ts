@@ -1,7 +1,7 @@
 import { expect } from "chai";
 
-import { IFolderEntry } from "../src/utils/Dropbox";
-import DropboxUtil from "../src/utils/DropboxUtil";
+import { IFolderEntry } from "../../src/utils/Dropbox";
+import DropboxUtil from "../../src/utils/DropboxUtil";
 
 describe("DropboxUtil", () => {
     let dropboxUtil: DropboxUtil;
