@@ -19,11 +19,38 @@ class Dropbox {
         this.accessToken = accessToken;
     }
 
+    public revokeToken(): Promise<any> {
+        return restClient({
+            path: "/2/auth/token/revoke",
+            method: "POST",
+            entity: null,
+            headers: {
+                "Authorization": "Bearer " + this.accessToken,
+                "Content-Type": "application/json"
+            }
+        });
+    }
+
+    public getCurrentAccount(): Promise<IGetCurrentAccountResponse> {
+        return restClient({
+            path: "/2/users/get_current_account",
+            method: "POST",
+            entity: null,
+            headers: {
+                "Authorization": "Bearer " + this.accessToken,
+                "Content-Type": "application/json"
+            }
+        }).then((response: Response) => {
+            return response.entity as IGetCurrentAccountResponse;
+        });
+    }
+
     public listFolder(path: string, recursive?: boolean, includeMediaInfo?: boolean,
                       includeDeleted?: boolean): Promise<IListFolderResponse> {
         return restClient({
             path: "/2/files/list_folder",
             method: "POST",
+            // _.merge() will skip the undefined fields
             entity: _.merge({}, {
                 path,
                 recursive,
@@ -124,6 +151,26 @@ export interface IApiResult {
     server_modified: string;
     rev: string;
     size: number;
+}
+
+export interface IGetCurrentAccountResponse {
+    "account_id": string;
+    "name": {
+        "given_name": string;
+        "surname": string;
+        "familiar_name": string;
+        "display_name": string;
+    };
+    "email": string;
+    "email_verified": boolean;
+    "disabled": boolean;
+    "country": string;
+    "locale": string;
+    "referral_link": string;
+    "is_paired": boolean;
+    "account_type": {
+        ".tag": string
+    };
 }
 
 export default Dropbox;

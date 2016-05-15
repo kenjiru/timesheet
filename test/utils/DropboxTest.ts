@@ -1,13 +1,37 @@
 import * as _ from "lodash";
 import { expect } from "chai";
 
-import Dropbox, { IFolderEntry, IListFolderResponse, IDownloadResponse, IUploadResponse } from "../../src/utils/Dropbox";
+import Dropbox, {
+    IFolderEntry, IListFolderResponse, IDownloadResponse, IUploadResponse, IGetCurrentAccountResponse
+} from "../../src/utils/Dropbox";
 
 describe("Dropbox", () => {
     let dropbox: Dropbox;
 
     before(() => {
         dropbox = new Dropbox("XQKe16VoqRkAAAAAAAAHi-R7wySlFyN-Mbcjmy2HZq89tGOx2RwmUsPE6_AwIuSw");
+    });
+
+    describe("#getCurrentAccount()", () => {
+        const GIVEN_NAME: string = "kenjiru";
+        const SURNAME: string = "kun";
+        let getCurrentAccountResponse: IGetCurrentAccountResponse;
+
+        before((done: Function) => {
+            dropbox.getCurrentAccount().then(
+                (response: IGetCurrentAccountResponse) => {
+                    getCurrentAccountResponse = response;
+                    done();
+                },
+                (error: any) => {
+                    done(error);
+                });
+        });
+
+        it(`should show the correct logged in as ${GIVEN_NAME} ${SURNAME}`, () => {
+            expect(getCurrentAccountResponse.name.given_name).equal(GIVEN_NAME);
+            expect(getCurrentAccountResponse.name.surname).equal(SURNAME);
+        });
     });
 
     describe("#listFolder()", () => {
