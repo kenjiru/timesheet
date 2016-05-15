@@ -13,6 +13,7 @@ var config = {
 	context: __dirname,
 	entry: {
 		app: src_dir + "/App.tsx",
+		dropboxAuth: src_dir + "/DropboxAuthPage.tsx",
 		vendor: [
 			"react", "redux", "react-redux", "rest", "when", "core-js", "jquery", "lodash", "moment",
 			"moment-duration-format", "bootstrap", "bootstrap-datepicker", "react-bootstrap", "react-select", "store"
@@ -20,7 +21,7 @@ var config = {
 	},
 	output: {
 		path: path.join(__dirname, '/dist'),
-		filename: 'App.js?[hash]'
+		filename: '[name].js?[hash]'
 	},
 	resolve: {
 		extensions: ['', '.ts', '.tsx', '.js']
@@ -64,7 +65,13 @@ var config = {
 	},
 	plugins: [
 		new HtmlWebpackPlugin({
-		    title: "React TypeScript demo"
+		    title: "React TypeScript demo",
+			chunks: [ "app", "vendor" ]
+		}),
+		new HtmlWebpackPlugin({
+			title: "Dropbox Auth",
+			chunks: [ "dropboxAuth", "vendor" ],
+			filename: "dropbox-auth.html"
 		}),
 		new webpack.optimize.CommonsChunkPlugin({
 			names: [ "vendor" ],
