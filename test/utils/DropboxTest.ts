@@ -16,7 +16,7 @@ describe("Dropbox", () => {
         let NO_FOLDERS: number = 1;
         let listFolderResponse: IListFolderResponse;
 
-        before((done) => {
+        before((done: Function) => {
             dropbox.listFolder("/dropbox-v2-api-test").then(
                 (response: IListFolderResponse) => {
                     listFolderResponse = response;
@@ -27,19 +27,19 @@ describe("Dropbox", () => {
                 });
         });
 
-        it(`should contain ${NO_ITEMS} items in total`, (done) => {
+        it(`should contain ${NO_ITEMS} items in total`, (done: Function) => {
             expect(listFolderResponse.entries).length(NO_ITEMS);
             done();
         });
 
-        it(`should contain ${NO_FILES} files`, (done) => {
-            let noFiles = countEntries(listFolderResponse.entries, "file");
+        it(`should contain ${NO_FILES} files`, (done: Function) => {
+            let noFiles: number = countEntries(listFolderResponse.entries, "file");
             expect(noFiles).to.equal(NO_FILES);
             done();
         });
 
-        it(`should contain ${NO_FOLDERS} folder`, (done) => {
-            let noFolders = countEntries(listFolderResponse.entries, "folder");
+        it(`should contain ${NO_FOLDERS} folder`, (done: Function) => {
+            let noFolders: number = countEntries(listFolderResponse.entries, "folder");
             expect(noFolders).to.equal(NO_FOLDERS);
             done();
         });
@@ -48,8 +48,8 @@ describe("Dropbox", () => {
 
     describe("#download()", () => {
         let downloadResponse: IDownloadResponse;
-        
-        before((done) => {
+
+        before((done: Function) => {
             dropbox.download("/dropbox-v2-api-test/Foo.txt").then(
                 (response: IDownloadResponse) => {
                     // console.log(response);
@@ -60,14 +60,14 @@ describe("Dropbox", () => {
                     done(error);
                 });
         });
-        
-        it("should have valid headers", (done) => {
+
+        it("should have valid headers", (done: Function) => {
             expect(downloadResponse.apiResult.name).to.equal("Foo.txt");
             expect(downloadResponse.apiResult.path_lower).to.equal("/dropbox-v2-api-test/foo.txt");
             done();
         });
 
-        it("should have valid contents", (done) => {
+        it("should have valid contents", (done: Function) => {
             expect(downloadResponse.apiResult.size).to.equal(16);
             done();
         });
@@ -76,7 +76,7 @@ describe("Dropbox", () => {
     describe("#upload()", () => {
         let uploadResponse: IUploadResponse;
 
-        before((done) => {
+        before((done: Function) => {
             dropbox.upload("/dropbox-v2-api-test/upload/foo.txt", "lorem ipsum").then(
                 (response: IUploadResponse) => {
                     // console.log(response);
@@ -89,13 +89,13 @@ describe("Dropbox", () => {
                 });
         });
 
-        it("should have valid headers", (done) => {
+        it("should have valid headers", (done: Function) => {
             expect(uploadResponse.apiResult.name).to.equal("foo.txt");
             expect(uploadResponse.apiResult.path_lower).to.equal("/dropbox-v2-api-test/upload/foo.txt");
             done();
         });
 
-        it("should have valid contents", (done) => {
+        it("should have valid contents", (done: Function) => {
             expect(uploadResponse.apiResult.size).to.equal(11);
             done();
         });

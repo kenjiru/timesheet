@@ -89,9 +89,9 @@ class Dropbox {
 }
 
 export interface IListFolderResponse {
-    entries: IFolderEntry[],
-    cursor: string,
-    had_more: boolean
+    entries: IFolderEntry[];
+    cursor: string;
+    had_more: boolean;
 }
 
 export interface IFolderEntry {
@@ -108,11 +108,11 @@ export interface IFolderEntry {
 
 export interface IDownloadResponse {
     fileContents: any;
-    apiResult: IApiResult
+    apiResult: IApiResult;
 }
 
 export interface IUploadResponse {
-    apiResult: IApiResult
+    apiResult: IApiResult;
 }
 
 export interface IApiResult {
