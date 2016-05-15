@@ -7,7 +7,7 @@ describe("DropboxUtil", () => {
     let dropboxUtil: DropboxUtil;
 
     before(() => {
-        dropboxUtil = new DropboxUtil("XQKe16VoqRkAAAAAAAAHbyrQBeBJLeHLk9Bqdj5c8nm0dBLltxLFf9vU13_3YysV");
+        dropboxUtil = new DropboxUtil("XQKe16VoqRkAAAAAAAAHi-R7wySlFyN-Mbcjmy2HZq89tGOx2RwmUsPE6_AwIuSw");
     });
 
     describe("#findMostRecentFile()", () => {

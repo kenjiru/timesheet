@@ -7,7 +7,7 @@ describe("Dropbox", () => {
     let dropbox: Dropbox;
 
     before(() => {
-        dropbox = new Dropbox("XQKe16VoqRkAAAAAAAAHbyrQBeBJLeHLk9Bqdj5c8nm0dBLltxLFf9vU13_3YysV");
+        dropbox = new Dropbox("XQKe16VoqRkAAAAAAAAHi-R7wySlFyN-Mbcjmy2HZq89tGOx2RwmUsPE6_AwIuSw");
     });
 
     describe("#listFolder()", () => {
