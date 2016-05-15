@@ -7,6 +7,7 @@ import { Grid, Row, Col, ButtonGroup, Button } from "react-bootstrap";
 import store, { IStore } from "./model/store";
 import { updateStore } from "./model/actions";
 import TaskManager from "./components/task-manager/TaskManager";
+import DropboxAuth from "./components/dropbox-auth/DropboxAuth";
 
 import XmlUtil from "./utils/XmlUtil";
 
@@ -39,6 +40,7 @@ class App extends React.Component<IAppProps, IAppState> {
                                     <Button onClick={this.saveStore}>Save Store</Button>
                                     <Button onClick={this.loadStore}>Load Store</Button>
                                 </ButtonGroup>
+                                <DropboxAuth/>
                             </Col>
                         </Row>
                     </Grid>
