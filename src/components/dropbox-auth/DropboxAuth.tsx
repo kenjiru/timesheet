@@ -6,6 +6,10 @@ import { Button } from "react-bootstrap";
 import Dropbox, { IGetCurrentAccountResponse } from "../../utils/Dropbox";
 import WindowUtil from "../../utils/WindowUtil";
 
+const STORAGE_KEY: string = "dropbox-auth";
+const APP_KEY: string = "6dfasskq63da4wj";
+const REDIRECT_URI: string = "http://localhost:8080/dropbox-auth.html";
+
 class DropboxAuth extends React.Component<IDropboxAuthProps, IDropboxAuthState> {
     private dropboxAuthWindow: Window;
 
@@ -16,7 +20,7 @@ class DropboxAuth extends React.Component<IDropboxAuthProps, IDropboxAuthState> 
     }
 
     public componentDidMount(): void {
-        window.addEventListener("message", this.onMessage.bind(this));
+        window.addEventListener("message", this.handleMessage.bind(this));
     }
 
     public render(): React.ReactElement<any> {
@@ -55,19 +59,16 @@ class DropboxAuth extends React.Component<IDropboxAuthProps, IDropboxAuthState> 
     }
 
     private openDropboxAuth(): void {
-        let appKey: string = "6dfasskq63da4wj";
-        let responseType: string = "token";
         let state: string = "1234";
-        let redirectUri: string = "http://localhost:8080/dropbox-auth.html";
 
         let oauth2Url: string = "https://www.dropbox.com/oauth2/authorize?" +
-            `client_id=${appKey}&response_type=${responseType}&state=${state}&redirect_uri=${redirectUri}`;
+            `client_id=${APP_KEY}&response_type=token&state=${state}&redirect_uri=${REDIRECT_URI}`;
         let windowOptions: string = "width=800,height=600,scrollbars=yes,location=no";
 
         this.dropboxAuthWindow = WindowUtil.openWindow(oauth2Url, windowOptions);
     }
 
-    private onMessage(event: MessageEvent): void {
+    private handleMessage(event: MessageEvent): void {
         if (this.dropboxAuthWindow) {
             this.dropboxAuthWindow.close();
         }
@@ -77,9 +78,7 @@ class DropboxAuth extends React.Component<IDropboxAuthProps, IDropboxAuthState> 
                 accessToken: event.data.accessToken,
                 uid: event.data.uid,
                 userName: response.name.display_name
-            }, () => {
-                this.writeStateToLocalStore();
-            });
+            }, this.writeStateToLocalStore.bind(this));
         });
     }
 
@@ -89,14 +88,12 @@ class DropboxAuth extends React.Component<IDropboxAuthProps, IDropboxAuthState> 
                 accessToken: null,
                 uid: null,
                 userName: null
-            }, () => {
-                this.writeStateToLocalStore();
-            });
+            }, this.writeStateToLocalStore.bind(this));
         });
     }
 
     private readStateFromLocalStore(): IDropboxAuthState {
-        let dropboxAuth: IDropboxAuthState = storage.get("dropbox-auth");
+        let dropboxAuth: IDropboxAuthState = storage.get(STORAGE_KEY);
 
         if (_.isNil(dropboxAuth)) {
             return {};
@@ -106,7 +103,7 @@ class DropboxAuth extends React.Component<IDropboxAuthProps, IDropboxAuthState> 
     }
 
     private writeStateToLocalStore(): void {
-        storage.set("dropbox-auth", {
+        storage.set(STORAGE_KEY, {
             accessToken: this.state.accessToken,
             uid: this.state.uid,
             userName: this.state.userName
