@@ -29,8 +29,8 @@ class TaskManager extends React.Component<ITaskManagerProps, ITaskManagerState> 
                 <CreateTask dispatch={this.props.dispatch} projects={this.props.projects} tags={this.props.tags}/>
                 <FilterTasks tasks={filteredTasks} breaks={filteredBreaks}
                              onIntervalChange={this.handleIntervalChange.bind(this)}/>
-                <WorkingDayList tasks={filteredTasks} projects={this.props.projects} breaks={filteredBreaks}
-                                tags={this.props.tags} taskTags={this.props.taskTags}/>
+                <WorkingDayList tasks={this.sortTasks(filteredTasks)} projects={this.props.projects}
+                                breaks={filteredBreaks} tags={this.props.tags} taskTags={this.props.taskTags}/>
             </div>
         );
     }
@@ -54,6 +54,10 @@ class TaskManager extends React.Component<ITaskManagerProps, ITaskManagerState> 
         return _.filter<T>(items, (item: T) => {
             return filterStartDate.isBefore(item.startDate) && filterEndDate.isAfter(item.endDate);
         });
+    }
+
+    private sortTasks(tasks: ITask[]): ITask[] {
+        return _.sortBy(tasks, (task: ITask) => task.startDate).reverse();
     }
 }
 
