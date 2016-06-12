@@ -1,0 +1,21 @@
+{
+  "name": "timesheet",
+  "globalDependencies": {
+    "react": "github:DefinitelyTyped/DefinitelyTyped/react/react.d.ts#0144ad5a74053f2292424847259c4c8e1d0fecaa",
+    "react-dom": "github:DefinitelyTyped/DefinitelyTyped/react/react-dom.d.ts#fa04c80f4a889613b96cb4f283848c61a9f64233",
+    "moment": "github:DefinitelyTyped/DefinitelyTyped/moment/moment.d.ts#55c750ace821f85e6643bbdb249dbd0b15a3df78",
+    "react-bootstrap": "github:DefinitelyTyped/DefinitelyTyped/react-bootstrap/react-bootstrap.d.ts#55c750ace821f85e6643bbdb249dbd0b15a3df78",
+    "react-redux": "github:DefinitelyTyped/DefinitelyTyped/react-redux/react-redux.d.ts#55c750ace821f85e6643bbdb249dbd0b15a3df78",
+    "redux": "github:DefinitelyTyped/DefinitelyTyped/redux/redux.d.ts#55c750ace821f85e6643bbdb249dbd0b15a3df78",
+    "redux-thunk": "github:DefinitelyTyped/DefinitelyTyped/redux-thunk/redux-thunk.d.ts#55c750ace821f85e6643bbdb249dbd0b15a3df78",
+    "moment-node": "github:DefinitelyTyped/DefinitelyTyped/moment/moment-node.d.ts#55c750ace821f85e6643bbdb249dbd0b15a3df78",
+    "lodash": "github:DefinitelyTyped/DefinitelyTyped/lodash/lodash.d.ts#55c750ace821f85e6643bbdb249dbd0b15a3df78",
+    "moment-range": "github:DefinitelyTyped/DefinitelyTyped/moment-range/moment-range.d.ts#55c750ace821f85e6643bbdb249dbd0b15a3df78",
+    "jquery": "github:DefinitelyTyped/DefinitelyTyped/jquery/jquery.d.ts#55c750ace821f85e6643bbdb249dbd0b15a3df78",
+    "rest": "github:DefinitelyTyped/DefinitelyTyped/rest/rest.d.ts#ce8ae773688d2244ba11fdf3378fcd68f773e1c4",
+    "when": "github:DefinitelyTyped/DefinitelyTyped/when/when.d.ts#ce8ae773688d2244ba11fdf3378fcd68f773e1c4",
+    "mocha": "github:DefinitelyTyped/DefinitelyTyped/mocha/mocha.d.ts#94d8775a947f626269b06ccadd6f5e61839389d0",
+    "chai": "github:DefinitelyTyped/DefinitelyTyped/chai/chai.d.ts#94d8775a947f626269b06ccadd6f5e61839389d0",
+    "assertion-error": "github:DefinitelyTyped/DefinitelyTyped/assertion-error/assertion-error.d.ts#94d8775a947f626269b06ccadd6f5e61839389d0"
+  }
+}
